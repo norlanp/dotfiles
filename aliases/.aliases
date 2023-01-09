@@ -1,4 +1,5 @@
 alias v=nvim
 alias gp='git push origin $(git branch --show-current)'
-alias gc='git commit -am' 
+alias gcm='git commit -am' 
+alias gc='git checkout -b'
 alias la='ls -lah'
