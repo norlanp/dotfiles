@@ -1,5 +1,5 @@
 alias v=nvim
-alias ps='git push origin $(git branch --show-current)'
+alias p='git push origin $(git branch --show-current)'
 alias pl='git pull'
 alias cm='git commit -am' 
 alias co='git checkout'
