@@ -29,3 +29,24 @@ colors:
   indexed_colors:
     - { index: 16, color: '0xe3786c' }
     - { index: 17, color: '0xd685af' }
+
+font:
+  # Normal (roman) font face
+  normal:
+    family: JetBrainsMono Nerd Font
+    style: Regular
+
+  # Bold font face
+  bold:
+    family: JetBrainsMono Nerd Font
+    style: Bold
+
+  # Italic font face
+  italic:
+    family: JetBrainsMono Nerd Font
+    style: Italic
+
+  # Bold italic font face
+  bold_italic:
+    family: JetBrainsMono Nerd Font
+    style: Bold Italic
