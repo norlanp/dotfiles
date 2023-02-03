@@ -1,2 +1,2 @@
 alias v=nvim
-lias lah='ls -lah'
+alias lah='ls -lah'
