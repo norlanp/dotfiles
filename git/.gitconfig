@@ -13,6 +13,5 @@
     ps = !git push origin $(git branch --show-current)
     pl = pull --recurse-submodules
     cm = !git add --all && git commit -m
-    co = checkout 
-    cob = checkout -b
+    co = !"f() { git checkout $1 2>/dev/null || git checkout -b $1; }; f"
     s = status
