@@ -1,8 +1,2 @@
 alias v=nvim
-alias p='git push origin $(git branch --show-current)'
-alias pl='git pull --recurse-submodules'
-alias cm='git add --all && git commit -m' 
-alias co='git checkout'
-alias cob='git checkout -b'
-alias s='git status'
-alias lah='ls -lah'
+lias lah='ls -lah'
