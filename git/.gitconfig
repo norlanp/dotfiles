@@ -1,8 +1,8 @@
 # add a ~/.norlan/.gitconfig and add the user section to it since it might be 
 # different per system
 #[user]
-#	name = Norlan Perdomo
-#	email = norlan.perdomo@gmail.com
+#	name = my name here
+#	email = myemail@domain.com
 
 [includeIf "gitdir:~/.norlan/"]
     path = ~/.norlan/.gitconfig
