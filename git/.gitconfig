@@ -1,6 +1,10 @@
+[commit]
+    gpgsign = true
+
 [user]
     name = Norlan Perdomo
     email = norlan.perdomo@gmail.com
+    signingkey = 79840D61
 
 [includeIf "gitdir:~/code/"]
     path = ~/code/.gitconfig
