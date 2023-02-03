@@ -2,5 +2,5 @@
     name = Norlan Perdomo
     email = norlan.perdomo@gmail.com
 
-[includeIf "gitdir:~/work/"]
-    path = ~/work/.gitconfig
+[includeIf "gitdir:~/code/"]
+    path = ~/code/.gitconfig
