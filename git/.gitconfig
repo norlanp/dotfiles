@@ -10,7 +10,7 @@
     path = ~/code/.gitconfig
 
 [alias]
-    ps = !sh -c 'git push origin $(git branch --show-current)'
+    ps = !git push origin $(git branch --show-current)
     pl = pull --recurse-submodules
     cm = !git add --all && git commit -m
     co = checkout 
