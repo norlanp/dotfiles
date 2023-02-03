@@ -8,7 +8,7 @@
 [alias]
     ps = !sh -c 'git push origin $(git branch --show-current)'
     pl = pull --recurse-submodules
-    cm = !sh -c 'git add --all && git commit -m 1$' -
+    cm = !sh -c 'git add --all && git commit -m 1$'
     co = checkout
     cob = checkout -b
     s = status
