@@ -8,6 +8,8 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 export PIPENV_VENV_IN_PROJECT=1
 
+setopt inc_append_history
+
 if [ -f ~/.aliases ]; then
   source ~/.aliases
 fi
