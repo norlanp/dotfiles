@@ -17,7 +17,8 @@ brew bundle
 ```
 
 ```
-cd ~./dotfiles && stow */
+# stow --delete */
+stow */
 ```
 
 clean up nvim
