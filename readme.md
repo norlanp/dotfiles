@@ -16,6 +16,9 @@ install homebrew
 brew bundle
 ```
 
+```
+cd ~./dotfiles && stow */
+```
 
 clean up nvim
 ```
