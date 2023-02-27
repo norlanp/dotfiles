@@ -12,7 +12,7 @@ install homebrew
 ```
 
 ```
-# brew bundle dump --describe --force
+# brew bundle dump --force
 brew bundle
 ```
 
