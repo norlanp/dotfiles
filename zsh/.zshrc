@@ -26,4 +26,6 @@ if [ -f ~/.custom ]; then
   source ~/.custom
 fi
 
+source "$HOME/.cargo/env"
+
 eval "$(starship init zsh)"
