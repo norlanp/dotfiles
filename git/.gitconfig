@@ -14,7 +14,7 @@
     pl = pull --recurse-submodules
     cm = !git add --all && git commit -m
     co = !"f() { git checkout $1 2>/dev/null || git checkout -b $1; }; f"
-    cms = !"f() { git add --all && git add --all && git commit -m '$1' && git push origin $(git branch --show-current); }; f"
+    cms = !"f() { git add --all && git add --all && git commit -m \"$1\" && git push origin $(git branch --show-current); }; f"
     s = status
 [pull]
 	rebase = false
