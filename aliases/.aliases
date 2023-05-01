@@ -1,6 +1,6 @@
 alias v=nvim
 alias lah='ls -lah'
-alias datetimeu='date -u +%Y-%m-%dT%H:%M:%S%Z'
-alias datetime='date +%Y-%m-%dT%H:%M:%S'
+alias datetu='date -u +%Y-%m-%dT%H:%M:%S%Z'
+alias datet='date +%Y-%m-%dT%H:%M:%S'
 alias dated='date +%Y-%m-%d'
 

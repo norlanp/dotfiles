@@ -4,10 +4,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 export PIPENV_VENV_IN_PROJECT=1
 
 setopt inc_append_history
-
-if [ -f ~/.aliases ]; then
-  source ~/.aliases
-fi
+setopt share_history
 
 if [ -f ~/.config/hash ]; then
   source ~/.config/hash
