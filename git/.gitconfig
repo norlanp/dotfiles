@@ -34,7 +34,7 @@
     light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
     true-color = always
     features = line-numbers
-    syntax-theme = Dracula
+    syntax-theme = zenburn
     plus-style = syntax "#003800"
     minus-style = syntax "#3f0001"
 
