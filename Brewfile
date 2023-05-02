@@ -13,6 +13,7 @@ brew "fd"
 brew "fzf"
 brew "gh"
 brew "git"
+brew "git-delta"
 brew "gnupg", link: false
 brew "go"
 brew "gpgme"

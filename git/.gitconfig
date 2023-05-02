@@ -18,6 +18,28 @@
     cms = !"f() { git add --all && git commit -m \"$1\" && git push origin $(git branch --show-current); }; f"
     s = status
 [pull]
-	rebase = false
+    rebase = false
+
 [init]
-	defaultBranch = master
+    defaultBranch = master
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+    true-color = always
+    features = line-numbers
+    syntax-theme = Dracula
+    plus-style = syntax "#003800"
+    minus-style = syntax "#3f0001"
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
