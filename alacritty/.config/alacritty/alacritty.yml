@@ -48,3 +48,9 @@ font:
   bold_italic:
     family: JetBrainsMono Nerd Font
     style: Bold Italic
+
+key_bindings:
+  - {key: Left, mods: Alt, chars: "\eb"}
+  - {key: Right, mods: Alt, chars: "\ef"}
+  - {key: Left, mods: Control, chars: "\eb"}
+  - {key: Right, mods: Control, chars: "\ef"}
