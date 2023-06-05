@@ -18,6 +18,9 @@ if [ -f ~/.custom ]; then
   source ~/.custom
 fi
 
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
 source "$HOME/.cargo/env"
 
 eval "$(starship init zsh)"

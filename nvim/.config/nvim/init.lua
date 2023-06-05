@@ -416,7 +416,9 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   -- clangd = {},
-  gopls = {},
+  gopls = {
+    usePlaceholders = true
+  },
   pyright = {},
   rust_analyzer = {},
   tsserver = {},
