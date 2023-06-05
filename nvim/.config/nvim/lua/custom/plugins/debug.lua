@@ -71,7 +71,7 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
-    require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
+    require('dap-python').setup('~/.local/share/nvim/mason/packages/debugpy/venv/bin/python')
     require("dap-vscode-js").setup({
       -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
       -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
