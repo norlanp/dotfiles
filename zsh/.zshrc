@@ -21,6 +21,9 @@ fi
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
+bindkey "^[[A" history-beginning-search-backward
+bindkey "^[[B" history-beginning-search-forward
+
 source "$HOME/.cargo/env"
 
 eval "$(starship init zsh)"
