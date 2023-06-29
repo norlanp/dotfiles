@@ -24,7 +24,7 @@
           "vertical" : "auto"
         },
         "speed" : {
-          "vertical" : 90
+          "vertical" : 100
         }
       }
     },
@@ -43,7 +43,7 @@
       },
       "scrolling" : {
         "speed" : {
-          "vertical" : 90
+          "vertical" : 100
         }
       }
     },
