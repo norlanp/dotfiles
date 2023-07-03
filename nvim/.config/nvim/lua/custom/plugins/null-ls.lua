@@ -12,6 +12,11 @@ return {
                 null_ls.builtins.diagnostics.eslint,
                 null_ls.builtins.diagnostics.ruff,
                 null_ls.builtins.diagnostics.mypy,
+
+                null_ls.builtins.code_actions.refactoring,
+                null_ls.builtins.code_actions.impl,
+                null_ls.builtins.code_actions.gomodifytags,
+                null_ls.builtins.code_actions.refactoring,
             },
         })
     end,

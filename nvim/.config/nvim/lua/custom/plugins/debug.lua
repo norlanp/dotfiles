@@ -82,6 +82,15 @@ return {
       -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
     })
 
+    -- require("dap").configurations["go"] = {
+    --   type = "go",
+    --   name = "Debug test",
+    --   request = "launch",
+    --   mode = "test",
+    --   program = function()
+    --     return vim.fn.fnamemodify(vim.fn.bufname(), ':p:h')
+    --   end
+    -- }
     for _, language in ipairs({ "typescript", "javascript" }) do
       require("dap").configurations[language] = {
         {
