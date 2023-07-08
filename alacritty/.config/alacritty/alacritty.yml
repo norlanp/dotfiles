@@ -71,6 +71,8 @@ font:
     family: JetBrainsMono Nerd Font
     style: Bold Italic
 
+  size: 13.0
+
 key_bindings:
   - {key: Left, mods: Alt, chars: "\eb"}
   - {key: Right, mods: Alt, chars: "\ef"}
