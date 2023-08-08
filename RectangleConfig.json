@@ -233,7 +233,7 @@
     },
     "firstThreeFourths" : {
       "keyCode" : 123,
-      "modifierFlags" : 1179648
+      "modifierFlags" : 1835008
     },
     "firstTwoThirds" : {
       "keyCode" : 14,
@@ -249,7 +249,7 @@
     },
     "lastThreeFourths" : {
       "keyCode" : 124,
-      "modifierFlags" : 1179648
+      "modifierFlags" : 1835008
     },
     "lastTwoThirds" : {
       "keyCode" : 17,
@@ -266,14 +266,6 @@
     "maximizeHeight" : {
       "keyCode" : 126,
       "modifierFlags" : 917504
-    },
-    "nextDisplay" : {
-      "keyCode" : 124,
-      "modifierFlags" : 1835008
-    },
-    "previousDisplay" : {
-      "keyCode" : 123,
-      "modifierFlags" : 1835008
     },
     "reflowTodo" : {
       "keyCode" : 45,
