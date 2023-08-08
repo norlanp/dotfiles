@@ -116,13 +116,6 @@ require('lazy').setup({
     },
   },
 
-  {
-    'shaunsingh/nord.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'nord'
-    end,
-  },
 
   {
     -- Set lualine as statusline
@@ -136,6 +129,15 @@ require('lazy').setup({
         section_separators = '',
       },
     },
+  },
+
+  {
+    'shaunsingh/nord.nvim',
+    priority = 1000,
+    config = function()
+      vim.g.nord_contrast = true
+      vim.cmd.colorscheme 'nord'
+    end,
   },
 
   {
