@@ -18,7 +18,7 @@ if [ -f ~/.custom ]; then
   source ~/.custom
 fi
 
-export PATH=$PATH$HOME/go/bin
+export PATH=$PATH:$HOME/go/bin
 
 bindkey "^[[A" history-beginning-search-backward
 bindkey "^[[B" history-beginning-search-forward
