@@ -66,10 +66,6 @@ require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
   -- Git related plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
-
-  -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
@@ -97,10 +93,6 @@ require('lazy').setup({
       'saadparwaiz1/cmp_luasnip',
       'rafamadriz/friendly-snippets' },
   },
-  { 'folke/zen-mode.nvim',  opts = {} },
-
-  -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
