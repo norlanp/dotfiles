@@ -6,10 +6,6 @@ export PIPENV_VENV_IN_PROJECT=1
 setopt inc_append_history
 setopt share_history
 
-if [ -f ~/.config/hash ]; then
-  source ~/.config/hash
-fi
-
 if [ -f ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
   source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
