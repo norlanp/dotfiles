@@ -6,9 +6,6 @@
     email = norlan.perdomo@gmail.com
     signingkey = 79840D61
 
-[includeIf "gitdir:~/code/"]
-    path = ~/code/.gitconfig
-
 [alias]
     ps = !git push origin $(git branch --show-current)
     pl = pull --recurse-submodules
@@ -42,3 +39,6 @@
 
 [diff]
     colorMoved = default
+
+[includeIf "gitdir:~/code/"]
+    path = ~/code/.gitconfig
