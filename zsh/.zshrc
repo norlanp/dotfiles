@@ -2,6 +2,7 @@ autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 export PIPENV_VENV_IN_PROJECT=1
+export EDITOR=$(which nvim)
 
 setopt inc_append_history
 setopt share_history
