@@ -24,3 +24,6 @@ source "$HOME/.cargo/env"
 
 eval "$(starship init zsh)"
 eval "$(/usr/local/bin/rtx activate zsh)"
+
+# bun completions
+[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
