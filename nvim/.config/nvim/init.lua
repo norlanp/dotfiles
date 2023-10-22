@@ -137,9 +137,8 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
+    main = "ibl",
     opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
     },
   },
 
@@ -270,8 +269,8 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ["<C-Down>"] = require('telescope.actions').cycle_history_next,
-        ["<C-Up>"] = require('telescope.actions').cycle_history_prev,
+        ['<C-u>'] = false,
+        ['<C-d>'] = false,
       },
     },
   },
