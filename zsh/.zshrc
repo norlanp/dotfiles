@@ -3,6 +3,11 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 export PIPENV_VENV_IN_PROJECT=1
 
+#set history size
+export HISTSIZE=10000
+#save history after logout
+export SAVEHIST=10000
+
 setopt inc_append_history
 setopt share_history
 
