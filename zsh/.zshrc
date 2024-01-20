@@ -27,7 +27,7 @@ bindkey "^[[B" history-beginning-search-forward
 source "$HOME/.cargo/env"
 
 eval "$(starship init zsh)"
-eval "$(/usr/local/bin/rtx activate zsh)"
+eval "$(/usr/local/bin/mise activate zsh)"
 
 # bun completions
 [ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
