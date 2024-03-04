@@ -37,8 +37,18 @@
     plus-style = syntax "#003800"
     minus-style = syntax "#3f0001"
 
+[merge]
+    tool = kdiff3
+
+[mergetool "kdiff3"]
+    trustExitCode = false
+    keepBackup = false
+
 [diff]
-    colorMoved = default
+    guitool = kdiff3
+
+[difftool "kdiff3"]
+    trustExitCode = false
 
 [includeIf "gitdir:~/code/"]
     path = ~/code/.gitconfig
