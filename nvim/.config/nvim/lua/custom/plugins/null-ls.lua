@@ -17,7 +17,10 @@ return {
                     prefer_local = "node_modules/.bin",
                 }),
 
-                null_ls.builtins.diagnostics.ruff,
+                null_ls.builtins.diagnostics.ruff.with({
+                    prefer_local = ".venv/bin",
+                }),
+
                 null_ls.builtins.diagnostics.mypy.with({
                     prefer_local = ".venv/bin",
                 }),
