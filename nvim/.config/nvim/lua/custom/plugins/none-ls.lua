@@ -10,10 +10,6 @@ return {
                     prefer_local = "node_modules/.bin",
                 }),
 
-                null_ls.builtins.diagnostics.eslint.with({
-                    prefer_local = "node_modules/.bin",
-                }),
-
                 null_ls.builtins.diagnostics.mypy.with({
                     prefer_local = ".venv/bin",
                 }),
