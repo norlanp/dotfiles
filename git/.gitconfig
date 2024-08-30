@@ -1,0 +1,54 @@
+[user]
+    name = Norlan Perdomo
+    email = norlan.perdomo@gmail.com
+
+[alias]
+    ps = !git push origin $(git branch --show-current)
+    pl = pull --recurse-submodules
+    d = diff
+    cm = !git add --all && git commit -m
+    co = !"f() { git checkout $1 2>/dev/null || git checkout -b $1; }; f"
+    c = !"f() { git add --all && git commit -m \"$1\" && git push origin $(git branch --show-current); }; f"
+    cleanup = !"f() { git fetch -p && git branch --merged | grep -v '*' | grep -v 'master' | xargs git branch -d; }; f"
+    s = status
+
+[pull]
+    rebase = false
+
+[init]
+    defaultBranch = master
+
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+    true-color = always
+    features = line-numbers
+    syntax-theme = zenburn
+    plus-style = syntax "#003800"
+    minus-style = syntax "#3f0001"
+
+[merge]
+    tool = kdiff3
+
+[mergetool "kdiff3"]
+    trustExitCode = false
+    keepBackup = false
+
+[diff]
+    guitool = kdiff3
+
+[difftool "kdiff3"]
+    trustExitCode = false
+
+[includeIf "gitdir:~/code/"]
+    path = ~/code/.gitconfig
+[push]
+	autoSetupRemote = true
+[branch]
+	autoSetupMerge = simple
