@@ -20,7 +20,6 @@ brew "fzf"
 brew "gh"
 brew "git"
 brew "git-delta"
-brew "gitui"
 brew "gnupg", link: false
 brew "go"
 brew "gpgme"
