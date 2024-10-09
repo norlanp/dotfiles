@@ -457,7 +457,7 @@ local servers = {
     },
   },
   rust_analyzer = {},
-  tsserver = {},
+  ts_ls = {},
   ruff = {},
   lua_ls = {
     Lua = {
