@@ -52,7 +52,7 @@ brew "tree"
 brew "wget"
 brew "wrk"
 brew "yarn"
-brew "youtube-dl"
+brew "yt-dlp"
 brew "ariga/tap/atlas"
 brew "dopplerhq/cli/doppler", link: false
 brew "oven-sh/bun/bun"
