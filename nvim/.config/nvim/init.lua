@@ -119,6 +119,7 @@ require('lazy').setup({
         theme = 'nord',
         component_separators = '|',
         section_separators = '',
+        path = 1,
       },
     },
   },
