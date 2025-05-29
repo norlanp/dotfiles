@@ -271,8 +271,8 @@ require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ['<C-u>'] = false,
-        ['<C-d>'] = false,
+        ["<C-k>"] = require('telescope.actions').cycle_history_next,
+        ["<C-j>"] = require('telescope.actions').cycle_history_prev,
       },
     },
   },
