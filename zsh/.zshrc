@@ -3,6 +3,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 export PIPENV_VENV_IN_PROJECT=1
 export POETRY_VIRTUALENVS_IN_PROJECT=1
+export EDITOR=nvim
 
 #set history size
 export HISTSIZE=10000

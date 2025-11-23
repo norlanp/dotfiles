@@ -1,20 +1,20 @@
 {
-  "$schema" : "https:\/\/schema.linearmouse.app\/0.9.2",
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.10.2",
   "schemes" : [
     {
-      "pointer" : {
-        "acceleration" : 2.5317,
-        "speed" : 1,
-        "disableAcceleration" : false
-      },
       "if" : {
         "device" : {
+          "category" : "mouse",
+          "productID" : "0xf00d",
           "productName" : "VirtualHID",
           "serialNumber" : "0001",
-          "productID" : "0xf00d",
-          "category" : "mouse",
           "vendorID" : "0xfeed"
         }
+      },
+      "pointer" : {
+        "acceleration" : 2.5317,
+        "disableAcceleration" : false,
+        "speed" : 1
       },
       "scrolling" : {
         "acceleration" : {
@@ -29,19 +29,22 @@
       }
     },
     {
-      "pointer" : {
-        "disableAcceleration" : true
-      },
       "if" : {
         "device" : {
+          "category" : "mouse",
+          "productID" : "0xb020",
           "productName" : "MX Vertical",
           "serialNumber" : "AD39E6431B7005FB",
-          "productID" : "0xb020",
-          "category" : "mouse",
           "vendorID" : "0x46d"
         }
       },
+      "pointer" : {
+        "disableAcceleration" : true
+      },
       "scrolling" : {
+        "reverse" : {
+          "vertical" : false
+        },
         "speed" : {
           "vertical" : 100
         }
@@ -50,10 +53,10 @@
     {
       "if" : {
         "device" : {
+          "category" : "trackpad",
+          "productID" : "0x27e",
           "productName" : "Apple Internal Keyboard \/ Trackpad",
           "serialNumber" : "FM7138300EVN1R0C7+RTZ",
-          "productID" : "0x27e",
-          "category" : "trackpad",
           "vendorID" : "0x5ac"
         }
       },
