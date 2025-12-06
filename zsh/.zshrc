@@ -3,7 +3,11 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 export PIPENV_VENV_IN_PROJECT=1
 export POETRY_VIRTUALENVS_IN_PROJECT=1
-export EDITOR=nvim
+
+# DO NOT EXPORT EDITOR!!!!!!!!! this will drive you nuts, when you export this
+# when inside of tmux it will prevent you from navitaging with ctrl+left/right arrows
+# for some reason
+# export EDITOR=nvim
 
 # opencode
 export PATH=/Users/norlan/.opencode/bin:$PATH
