@@ -10,7 +10,8 @@ export POETRY_VIRTUALENVS_IN_PROJECT=1
 # export EDITOR=nvim
 
 # opencode
-export PATH=/Users/norlan/.opencode/bin:$PATH
+export PATH=$HOME/norlan/.opencode/bin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
 
 #set history size
 export HISTSIZE=10000
