@@ -6,6 +6,22 @@ Plan & coordinate, **NEVER implement**. Always delegate ALL work to 25+ yr disti
 
 ---
 
+## Model Tiers
+
+Spawn sub-agents with appropriate capability tiers to optimize cost while maintaining quality.
+
+| Tier | Tag | Capability | Tasks |
+|------|-----|-----------|-------|
+| T1 | `[T1:reasoning]` | Highest analytical depth, architectural judgment | PRD/FRD/ERD, review gates, execution plans |
+| T2 | `[T2:balanced]` | Strong coding + reasoning, cost-effective | Implementation, fixing, QA, debugging |
+| T3 | `[T3:quick]` | Fast, low-cost, structured output | Agent logs, status updates |
+
+**Task tool mapping**: `[T1:reasoning]` → `model: "opus"` | `[T2:balanced]` → `model: "sonnet"` | `[T3:quick]` → `model: "haiku"`
+
+**Fallback**: If tier unavailable, use next-lower tier.
+
+---
+
 ## Phase 1: Init
 
 1. Feature: arg → use | none → scan `docs/prds/capabilities.md` | kebab-case
@@ -15,7 +31,7 @@ Plan & coordinate, **NEVER implement**. Always delegate ALL work to 25+ yr disti
 5. PRD exists + approved? → Phase 1b | PRD exists + draft? → step 8 | else → 1a
 
 ### 1a: PRD
-6. Spawn Distinguished PM agent → discovery questions, write PRD
+6. `[T1:reasoning]` Spawn Distinguished PM agent → discovery questions, write PRD
    - If `design.md` exists: use as primary input, skip redundant discovery
    - If no design: full discovery process
 7. Update `capabilities.md` → status=`draft`
@@ -24,7 +40,7 @@ Plan & coordinate, **NEVER implement**. Always delegate ALL work to 25+ yr disti
 
 ### 1b: Size & FRD/ERD
 10. Assess size: `S` (< 3 tasks) | `M` (3-7) | `L` (8-15) | `XL` (15+)
-11. **M/L/XL**: Spawn parallel agents:
+11. **M/L/XL**: `[T1:reasoning]` Spawn parallel agents:
     - Distinguished BA → `frd.md` (functional requirements)
     - Distinguished Architect → `erd.md` (engineering requirements)
 12. **GATE**: Wait for both FRD + ERD completion
@@ -37,7 +53,7 @@ Plan & coordinate, **NEVER implement**. Always delegate ALL work to 25+ yr disti
 ## Phase 2: Plan
 
 16. **GATE**: Verify exists: PRD (required), FRD + ERD (required for M/L/XL)
-17. Spawn Distinguished Architect agent → read PRD/FRD/ERD/arch, write `execution-plan.md`
+17. `[T1:reasoning]` Spawn Distinguished Architect agent → read PRD/FRD/ERD/arch, write `execution-plan.md`
      - Tasks with `[PARALLEL]/[SERIAL]/[DEPENDS_ON]` markers
      - Agent type per task
      - **Explicit TDD steps per task** (see Task prompt template)
@@ -59,15 +75,15 @@ Plan & coordinate, **NEVER implement**. Always delegate ALL work to 25+ yr disti
 ## Phase 4: Execute
 
 24. **GATE**: Verify prompts exist for next task(s) before spawning
-25. **MANDATORY**: Spawn via `Task` tool, `subagent_type="general"` | parallel = single msg
+25. **MANDATORY**: `[T2:balanced]` Spawn via `Task` tool, `subagent_type="general"` | parallel = single msg
 26. **NEVER** do implementation work directly - always delegate to sub-agents (ALL sizes)
 27. Monitor `agent-logs/`, check blockers
 28. **TWO-STAGE REVIEW LOOP** (for code tasks):
-    - Task COMPLETED → Stage 1: Spawn Requirements Compliance Reviewer
-    - Stage 1 PASS → Stage 2: Spawn Code Quality Reviewer + QA
+    - Task COMPLETED → Stage 1: `[T1:reasoning]` Spawn Requirements Compliance Reviewer
+    - Stage 1 PASS → Stage 2: `[T1:reasoning]` Spawn Code Quality Reviewer + QA
     - Stage 2: Code review + QA (web features: Playwright MCP if available)
     - Stage 2 PASS → next task
-    - Either FAIL → spawn Fix agent with specific issues → re-run failed stage
+    - Either FAIL → `[T2:balanced]` spawn Fix agent with specific issues → re-run failed stage
     - Max 3 iterations per stage, then escalate to user
     - Skip reviews for docs/planning tasks
 29. Blockers → debug/adjust | deps change → resequence
@@ -190,7 +206,7 @@ TDD (code tasks): 1.write failing test 2.verify fail 3.minimal impl 4.verify pas
 
 Success: [ ]ACs satisfied [ ]test-first [ ]saw fail [ ]minimal [ ]green [ ]no regression
 
-Log→agent-logs/task{N}-phase{M}.md
+Log→agent-logs/task{N}-phase{M}.md (use `[T3:quick]` for log writes)
 status: IN_PROGRESS|COMPLETED|BLOCKED | fr_refs | ac_refs | files | tests | blockers
 ```
 

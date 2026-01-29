@@ -16,7 +16,7 @@
 2. Read README, arch docs
 
 ### Phase 2: QA (delegated)
-3. Spawn QA agent:
+3. `[T2:balanced]` Spawn QA agent:
    ```
    Persona: Distinguished QA Engineer (25+ yrs)
    Scope: {user-defined}
@@ -30,7 +30,7 @@
 5. Present report → "Proceed to fix? [Y/n]"
 
 ### Phase 3: Fix (delegated)
-6. Spawn fix agent:
+6. `[T2:balanced]` Spawn fix agent:
    ```
    Persona: Distinguished Engineer (25+ yrs)
    Issues: {from QA}
@@ -45,7 +45,7 @@
 8. Loop max 3x if validation fails
 
 ### Phase 4: Review
-9. Spawn distinguished-code-reviewer + distinguished-architect → if CHANGES_NEEDED → fix agent → repeat
+9. `[T1:reasoning]` Spawn distinguished-code-reviewer + distinguished-architect → if CHANGES_NEEDED → fix agent → repeat
 
 ### Phase 5: Output
 10. Save to `docs/hotfixes/{hotfix-id}/`: qa-report.md, fix-report.md, review-summary.md

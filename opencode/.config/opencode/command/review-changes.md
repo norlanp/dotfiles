@@ -25,7 +25,7 @@
    | DevOps | Distinguished Platform Engineer |
    | UI | Distinguished UX Engineer |
 
-4. **Spawn reviewers** immediately via Task tool (no confirmation needed) → each returns findings w/ 🔴🟠🔵 + file:line
+4. `[T1:reasoning]` **Spawn reviewers** immediately via Task tool (no confirmation needed) → each returns findings w/ 🔴🟠🔵 + file:line
 5. **Report**:
    ```
    # Review: {scope}
@@ -41,8 +41,8 @@
    ```
 6. **Iterate**: If issues → "Fix now? [Y/n]" → delegate fixes to specialized sub-agents:
    - Analyze dependencies between issues (shared files, sequential logic, etc.)
-   - **Parallel**: Independent issues → spawn all sub-agents in single message (multiple Task calls)
-   - **Serial**: Dependent issues → spawn sub-agents one at a time, wait for completion
+   - **Parallel**: Independent issues → `[T2:balanced]` spawn all sub-agents in single message (multiple Task calls)
+   - **Serial**: Dependent issues → `[T2:balanced]` spawn sub-agents one at a time, wait for completion
    - Use Task tool with **Distinguished** specialists (25+ yrs) matching issue domain
    - Each sub-agent receives: issue description, file:line, priority, context
    - Sub-agent implements fix and reports back
