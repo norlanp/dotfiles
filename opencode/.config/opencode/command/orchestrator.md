@@ -91,14 +91,35 @@ Spawn sub-agents with appropriate capability tiers to optimize cost while mainta
 
 ---
 
+## Phase 4.5: Final Review
+
+Invoke `/review-changes` workflow as integrated quality gate after all implementation tasks complete.
+
+See `/review-changes` for reviewer selection logic and SME mapping.
+
+31. **GATE**: Verify all Phase 4 tasks COMPLETED with Stage 2 PASS
+32. Run `/review-changes` workflow internally:
+    - Scope: All files changed during this feature (git diff from feature start)
+    - Required reviewers: Architect, SME, Security
+    - Additional reviewers based on changes detected
+33. **Review findings**:
+    - 🔴 High → `[T2:balanced]` spawn Fix agents → re-run `/review-changes`
+    - 🟠 Medium → `[T2:balanced]` spawn Fix agents → re-run `/review-changes`
+    - 🔵 Low → document in completion-summary.md (optional fixes)
+34. Max 3 iterations, then escalate to user
+35. **GATE**: All 🔴🟠 resolved → proceed to Phase 5
+
+---
+
 ## Phase 5: Complete
 
-31. Run full test suite, delegate any fixes to sub-agents
-32. `/check-docs`, update arch if changed
-33. All pass → write `completion-summary.md`
-34. **GATE**: Present summary to user for final approval
-35. Archive: delete `agent-logs/`, delete `agent-prompts/`
-36. Update `capabilities.md` → status=`completed`
+36. Run full test suite, delegate any fixes to sub-agents
+37. `/check-docs`, update arch if changed
+38. All pass → write `completion-summary.md`
+    - Include: Phase 4.5 review summary, any 🔵 items deferred
+39. **GATE**: Present summary to user for final approval
+40. Archive: delete `agent-logs/`, delete `agent-prompts/`
+41. Update `capabilities.md` → status=`completed`
 
 ---
 
