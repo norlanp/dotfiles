@@ -38,7 +38,7 @@ Cycle: failing test → run (watch fail) → minimal code → run (watch pass) �
 ### Safety
 - **Confirm before:** operations outside cwd, system-wide changes, fetching URLs not provided by user
 - Clean up background processes when done
-- Temp files: use `cwd/tmp/`, add to .gitignore
+- **Never use system directories** - use `./tmp/` and `./var/` in cwd instead of `/tmp` or `/var`; add to .gitignore
 
 ### Python
 - Always use `uv` for packages, venvs, scripts
