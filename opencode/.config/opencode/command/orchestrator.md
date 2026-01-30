@@ -91,14 +91,17 @@ Spawn sub-agents with appropriate capability tiers to optimize cost while mainta
 
 ---
 
-## Phase 4.5: Final Review
+## Phase 4.5: Final Review (MANDATORY)
 
-Invoke `/review-changes` workflow as integrated quality gate after all implementation tasks complete.
+**⚠️ BLOCKING REQUIREMENT**: You MUST invoke `/review-changes` via the Skill tool. Do NOT manually claim this phase passed.
 
 See `/review-changes` for reviewer selection logic and SME mapping.
 
 31. **GATE**: Verify all Phase 4 tasks COMPLETED with Stage 2 PASS
-32. Run `/review-changes` workflow internally:
+32. **MANDATORY**: Invoke `/review-changes` using the Skill tool:
+    - `Skill(skill="review-changes")`
+    - Do NOT proceed until skill execution completes
+    - Do NOT write "Phase 4.5 PASSED" without actual skill invocation
     - Scope: All files changed during this feature (git diff from feature start)
     - Required reviewers: Architect, SME, Security
     - Additional reviewers based on changes detected
@@ -109,17 +112,23 @@ See `/review-changes` for reviewer selection logic and SME mapping.
 34. Max 3 iterations, then escalate to user
 35. **GATE**: All 🔴🟠 resolved → proceed to Phase 5
 
+**❌ PROHIBITED**: Claiming Phase 4.5 passed without Skill tool invocation. If you wrote "Phase 4.5 Review: PASSED" in a summary without invoking `/review-changes`, you MUST go back and invoke it now.
+
 ---
 
 ## Phase 5: Complete
 
-36. Run full test suite, delegate any fixes to sub-agents
-37. `/check-docs`, update arch if changed
-38. All pass → write `completion-summary.md`
-    - Include: Phase 4.5 review summary, any 🔵 items deferred
-39. **GATE**: Present summary to user for final approval
-40. Archive: delete `agent-logs/`, delete `agent-prompts/`
-41. Update `capabilities.md` → status=`completed`
+36. **PREREQUISITE CHECK**: Before proceeding, verify:
+    - [ ] `/review-changes` was invoked via Skill tool (not just claimed)
+    - [ ] Review findings were processed (🔴🟠 fixed, 🔵 documented)
+    - If not → return to Phase 4.5 and invoke skill
+37. Run full test suite, delegate any fixes to sub-agents
+38. `/check-docs`, update arch if changed
+39. All pass → write `completion-summary.md`
+    - Include: Phase 4.5 review summary (with proof of skill invocation), any 🔵 items deferred
+40. **GATE**: Present summary to user for final approval
+41. Archive: delete `agent-logs/`, delete `agent-prompts/`
+42. Update `capabilities.md` → status=`completed`
 
 ---
 
