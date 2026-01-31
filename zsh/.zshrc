@@ -42,3 +42,6 @@ eval "$(/opt/homebrew/bin/mise activate zsh)"
 # bun completions
 [ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
 
+
+# opencode
+export PATH=/Users/norlan/.opencode/bin:$PATH
