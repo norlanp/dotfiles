@@ -7,9 +7,11 @@
 
 ## Flow
 
-1. **Scope**: Ask what to review → confirm
-2. **Context**: git status/diff/log, read arch docs
-3. **Select personas** based on changes:
+1. **Scope** (MANDATORY):
+   - **If invoked directly** (`/review-changes`): Ask user what to review → confirm
+   - **If invoked from orchestrator** (Phase 4.6): Use uncommitted changes from feature implementation (git diff)
+2. **Context** (MANDATORY): git status/diff/log, read arch docs
+3. **Select personas** (MANDATORY) based on changes:
 
    **Required (all 25+ yrs):**
    - Distinguished Architect - architecture, scalability, debt
@@ -25,21 +27,21 @@
    | DevOps | Distinguished Platform Engineer |
    | UI | Distinguished UX Engineer |
 
-4. `[T1:reasoning]` **Spawn reviewers** immediately via Task tool (no confirmation needed) → each returns findings w/ 🔴🟠🔵 + file:line
-5. **Report**:
+4. (MANDATORY) `[T1:reasoning]` **Spawn reviewers** immediately via Task tool (no confirmation needed) → each returns findings w/ 🔴🟠🔵 + file:line
+5. **Report** (MANDATORY):
    ```
    # Review: {scope}
    Reviewers: {list}
-   
+
    ## Findings
    ### {Persona}
    - 🔴 {issue} file:line
    - 🟠 {issue} file:line
-   
+
    ## Verdict: ✅ APPROVED | 🔄 CHANGES_NEEDED
    ## Actions: {list}
    ```
-6. **Iterate**: If issues → "Fix now? [Y/n]" → delegate fixes to specialized sub-agents:
+6. **Iterate** (MANDATORY): If issues exist, immediately delegate fixes to specialized sub-agents:
    - Analyze dependencies between issues (shared files, sequential logic, etc.)
    - **Parallel**: Independent issues → `[T2:balanced]` spawn all sub-agents in single message (multiple Task calls)
    - **Serial**: Dependent issues → `[T2:balanced]` spawn sub-agents one at a time, wait for completion

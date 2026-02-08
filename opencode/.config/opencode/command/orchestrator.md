@@ -18,7 +18,7 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 1: Init
+## Phase 1: Init (MANDATORY)
 
 1. Feature: arg → use | none → scan `docs/prds/capabilities.md` | kebab-case
 2. Create `.opencode/agent-types/` if missing
@@ -42,7 +42,7 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 2: Plan
+## Phase 2: Plan (MANDATORY)
 
 16. **GATE**: PRD exists; FRD+ERD for M/L/XL
 17. `[T1]` Architect → `execution-plan.md` with:
@@ -52,7 +52,7 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 3: Prompts
+## Phase 3: Prompts (MANDATORY)
 
 19. Check/create agent types from defaults
 20. Generate `agent-prompts/task{N}-phase{M}-{type}.md` for each task
@@ -61,7 +61,7 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 4: Execute
+## Phase 4: Execute (MANDATORY)
 
 23. **GATE**: Prompts exist before spawn
 24. `[T2]` Spawn via Task tool, `subagent_type="general"` | parallel = single msg
@@ -78,7 +78,7 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 4.5: Integration Verification
+## Phase 4.5: Integration Verification (MANDATORY)
 
 **Purpose**: Catch "invisible" gaps - code exists but isn't wired/accessible. Stage 2 passing ≠ feature accessible.
 
@@ -109,7 +109,7 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 4.6: Final Review
+## Phase 4.6: Final Review (MANDATORY)
 
 **BLOCKING**: Must invoke `/review-changes` via Skill tool. Writing "Phase 4.6 PASSED" without skill invocation = violation.
 
@@ -123,15 +123,26 @@ Fallback: next-lower tier if unavailable.
 
 ---
 
-## Phase 5: Complete
+## Phase 5: Complete (MANDATORY)
 
 42. **PREREQ**: Phase 4.5 (integration) + 4.6 (review) passed - verified, not claimed
 43. Run full test suite, delegate fixes
 44. `/check-docs`, update arch if changed
 45. Write `completion-summary.md` (integration checklist, review summary, deferred items)
 46. **GATE**: User final approval
-47. Archive: delete `agent-logs/`, `agent-prompts/`
-48. Update → `completed`
+47. Update → `completed`
+
+## Phase 6: Cleanup (MANDATORY - Always Run)
+
+**FINALLY**: This phase MUST execute regardless of completion status (success, failure, or abort).
+
+48. **Delete ephemeral artifacts**:
+    - Delete `agent-logs/` - all task execution logs
+    - Delete `agent-prompts/` - all generated agent prompts
+    - Verify directories removed
+49. **Archive** (if cleanup skipped due to error):
+    - Move `agent-logs/` to `.opencode/archive/{feature-name}-{timestamp}/`
+    - Move `agent-prompts/` to `.opencode/archive/{feature-name}-{timestamp}/`
 
 ---
 
