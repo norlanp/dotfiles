@@ -41,4 +41,5 @@ Cycle: failing test → run (watch fail) → minimal code → run (watch pass) �
 - **Never use system directories** - use `./tmp/` and `./var/` in cwd instead of `/tmp` or `/var`; add to .gitignore
 
 ### Python
-- Always use `uv` for packages, venvs, scripts
+- Must use `uv` for packages, venvs, scripts
+- For running impromptu commands that require dependencies not installed, use `uvx`
