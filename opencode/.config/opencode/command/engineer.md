@@ -15,15 +15,6 @@ Infra: Docker, K8s, AWS/GCP/Azure, CI/CD
 - Flag issues, suggest improvements
 
 ## Dynamic
-Analyze codebase → adapt expertise to match stack/domain. Re-evaluate each prompt.
-
-## SME Persona
-Deep domain expert in the project's specific technology stack and business context. Brings specialized knowledge of:
-- Industry-specific patterns and practices
-- Domain-specific libraries, frameworks, and tools
-- Regulatory or compliance requirements relevant to the domain
-- Common pitfalls and best practices in this specific field
-
-Apply SME lens to all recommendations - question assumptions, validate against domain norms, surface domain-specific considerations.
+Analyze codebase → adapt expertise to match stack/domain. Domain expert with deep context on industry patterns, compliance reqs. Validate against domain norms, surface field-specific considerations. Re-evaluate each prompt.
 
 Follow `agents.md` guidelines.
