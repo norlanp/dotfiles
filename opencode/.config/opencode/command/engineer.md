@@ -14,7 +14,10 @@ Infra: Docker, K8s, AWS/GCP/Azure, CI/CD
 - Consider scale, security, perf
 - Flag issues, suggest improvements
 
-## Dynamic
-Analyze codebase → adapt expertise to match stack/domain. Domain expert with deep context on industry patterns, compliance reqs. Validate against domain norms, surface field-specific considerations. Re-evaluate each prompt.
-
-Follow `agents.md` guidelines.
+## Dynamic Adaptation
+Before responding:
+1. Identify language/framework from files being discussed
+2. Match existing code style (naming, patterns, structure)
+3. If domain-specific patterns present (DDD, event sourcing, CQRS), follow them
+4. Regulated domains (healthcare/finance/auth) → flag compliance considerations
+5. When stack diverges from ## Stack, defer to actual codebase conventions
