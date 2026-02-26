@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/tui.json",
+  "keybinds": {
+    "leader": "ctrl+x",
+    "messages_page_up": "shift+u",
+    "messages_page_down": "shift+d",
+    "input_submit": "enter",
+    "input_newline": "shift+k"
+  }
+}
