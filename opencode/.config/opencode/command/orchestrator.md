@@ -6,15 +6,27 @@ Plan & coordinate, **NEVER implement**. Delegate ALL work to 25+ yr distinguishe
 
 ---
 
-## Model Tiers
+## Agent Modes
 
-| Tier | Tag | Use |
-|------|-----|-----|
-| T1 | `[T1:reasoning]` | PRD/FRD/ERD, reviews, plans → `model: "opus"` |
-| T2 | `[T2:balanced]` | Implementation, fixes, QA → `model: "sonnet"` |
-| T3 | `[T3:quick]` | Logs, status → `model: "haiku"` |
+| Mode | Tag | Use | Task Tool Mapping | Effort Target |
+|------|-----|-----|-------------------|---------------|
+| T1 | `[T1:deep]` | PRD/FRD/ERD, reviews, plans (highest rigor) | `subagent_type="general"` for delivery work; use `"explore"` with `very thorough` only for repo discovery | High |
+| T2 | `[T2:balanced]` | Implementation, fixes, QA (default rigor) | `subagent_type="general"` | Medium |
+| T3 | `[T3:quick]` | Logs, status, lightweight checks (fastest) | `subagent_type="general"`; no approvals/architecture decisions | Low |
 
-Fallback: next-lower tier if unavailable.
+OpenCode/OpenAI compatibility:
+
+- `T1/T2/T3` are orchestration modes (effort/risk), not Claude-specific model names.
+- If OpenCode runtime variants are configured, map modes to effort levels on the same base model (`T1=high`, `T2=medium`, `T3=low`).
+- If effort variants are unavailable, keep the same model and express mode through prompt strictness, evidence requirements, and review depth.
+- Downgrade mode (`T1` -> `T2` -> `T3`) only when blocked by time/tooling constraints, and record the reason in logs.
+
+### Gate Ownership (CRITICAL)
+
+- All `**GATE**: User approves ...` steps are owned by the orchestrator in the **primary chat session**.
+- Never delegate user approval requests to subagents, Task tool runs, or agent prompt files.
+- Subagents may only return `READY_FOR_APPROVAL` with evidence; orchestrator must surface it and wait for user response.
+- On resume, if a user-approval gate is pending, surface it immediately before spawning any new subagents.
 
 ---
 
@@ -113,10 +125,13 @@ Fallback: next-lower tier if unavailable.
 
 **BLOCKING**: Must invoke `/review-changes` via Skill tool. Writing "Phase 4.6 PASSED" without skill invocation = violation.
 
+**NO-HANG RULE**: Never wait indefinitely in this phase. If a reviewer call cannot run or does not return, mark `BLOCKED` with reason and execute fallback immediately.
+
 37. **GATE**: Phase 4.5 integration verification passed
 38. Execute: `Skill(skill="review-changes")` - wait for completion
     - Scope: all changed files (git diff from feature start)
     - Required: Architect, SME, Security reviewers
+    - If skill unavailable/fails/times out: run equivalent `[T1]` parallel reviewers via Task tool and aggregate findings in primary session
 39. Findings: 🔴🟠 → `[T2]` Fix → re-run `/review-changes` | 🔵 → document
 40. Max 3 iterations → escalate
 41. **GATE**: All 🔴🟠 resolved → Phase 5
@@ -129,7 +144,7 @@ Fallback: next-lower tier if unavailable.
 43. Run full test suite, delegate fixes
 44. `/check-docs`, update arch if changed
 45. Write `completion-summary.md` (integration checklist, review summary, deferred items)
-46. **GATE**: User final approval
+46. **GATE (PRIMARY SESSION ONLY)**: Orchestrator requests user final approval in this chat; subagents must not request approval
 47. Update → `completed`
 
 ## Phase 6: Cleanup (MANDATORY - Always Run)
@@ -219,6 +234,7 @@ ACs: | AC-FR-{N} | given | when | then |
 TDD: 1.failing test 2.verify fail 3.minimal impl 4.verify pass 5.refactor 6.commit
 Success: [ ]ACs [ ]test-first [ ]saw fail [ ]minimal [ ]green [ ]no regression
 Log: agent-logs/task{N}-phase{M}.md | status | refs | files | tests | blockers
+Approval: if a gate is reached, return READY_FOR_APPROVAL + evidence; do not prompt user directly
 ```
 
 ### Stage 1: Spec Compliance
