@@ -6,6 +6,7 @@
 3. **Fail fast** - surface errors early, never hide failures
 4. **No secrets** - use env vars, never commit credentials
 5. **No AI slop** - no unnecessary comments, no `any` casts, match file style, no emojis
+6. **Prompt with choices** - when user input is required, provide concise options they can pick from and include a recommended default
 
 ### Code Quality (Power of Ten)
 - Simple control flow - no goto, recursion; loops have fixed bounds
