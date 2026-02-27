@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@tarquinen/opencode-dcp@latest"],
+  // "plugin": ["@tarquinen/opencode-dcp@latest"],
   "mode": {
       "t1": {
         "model": "openai/gpt-5.3-codex",
