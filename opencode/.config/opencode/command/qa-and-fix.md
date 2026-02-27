@@ -4,6 +4,11 @@
 
 **NOTE**: For ad-hoc QA only. Under `/orchestrator`, use inline QA Gate instead.
 
+## Model Tiers
+- Inherit tier semantics from `/orchestrator`.
+- `T1` = deep review rigor, `T2` = balanced execution/fixes, `T3` = quick triage only.
+- Task tool mapping: `subagent_type="general"`; if effort variants exist use `T1=high`, `T2=medium`, `T3=low`, else enforce via prompt depth/evidence.
+
 ## Agents
 - **Orchestrator**: Coordinate, Playwright fallback
 - **QA Agent**: Distinguished QA Engineer (25+ yrs) - investigate, test, validate
@@ -45,7 +50,7 @@
 8. Loop max 3x if validation fails
 
 ### Phase 4: Review
-9. `[T1:reasoning]` Spawn distinguished-code-reviewer + distinguished-architect → if CHANGES_NEEDED → fix agent → repeat
+9. `[T1:deep]` Spawn distinguished-code-reviewer + distinguished-architect → if CHANGES_NEEDED → fix agent → repeat
 
 ### Phase 5: Output
 10. Save to `docs/hotfixes/{hotfix-id}/`: qa-report.md, fix-report.md, review-summary.md

@@ -5,6 +5,21 @@
 ## Priority
 🔴 High - must fix | 🟠 Medium - should fix | 🔵 Low - suggestion
 
+## Agent Modes
+
+| Mode | Tag | Use | Effort |
+|------|-----|-----|--------|
+| T1 | `[T1:deep]` | Reviewer passes (architecture/security/domain) | High |
+| T2 | `[T2:balanced]` | Issue fixes and re-validation | Medium |
+| T3 | `[T3:quick]` | Triage/status only (no approvals/security decisions) | Low |
+
+OpenCode/OpenAI compatibility:
+
+- `T1/T2/T3` are orchestration modes (effort/risk), not model names.
+- Task tool mapping: use `subagent_type="general"` for all modes.
+- If runtime effort variants exist, map `T1=high`, `T2=medium`, `T3=low`; otherwise keep one model and enforce mode by prompt depth/evidence.
+- Downgrade only when blocked by time/tooling constraints, and record why in review notes.
+
 ## Flow
 
 1. **Scope** (MANDATORY):
@@ -27,7 +42,7 @@
    | DevOps | Distinguished Platform Engineer |
    | UI | Distinguished UX Engineer |
 
-4. (MANDATORY) `[T1:reasoning]` **Spawn reviewers** immediately via Task tool (no confirmation needed) → each returns findings w/ 🔴🟠🔵 + file:line
+4. (MANDATORY) `[T1:deep]` **Spawn reviewers** immediately via Task tool (no confirmation needed) → each returns findings w/ 🔴🟠🔵 + file:line
 5. **Report** (MANDATORY):
    ```
    # Review: {scope}

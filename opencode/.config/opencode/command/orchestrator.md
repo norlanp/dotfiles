@@ -8,25 +8,25 @@ Plan & coordinate, **NEVER implement**. Delegate ALL work to 25+ yr distinguishe
 
 ## Agent Modes
 
-| Mode | Tag | Use | Task Tool Mapping | Effort Target |
-|------|-----|-----|-------------------|---------------|
-| T1 | `[T1:deep]` | PRD/FRD/ERD, reviews, plans (highest rigor) | `subagent_type="general"` for delivery work; use `"explore"` with `very thorough` only for repo discovery | High |
-| T2 | `[T2:balanced]` | Implementation, fixes, QA (default rigor) | `subagent_type="general"` | Medium |
-| T3 | `[T3:quick]` | Logs, status, lightweight checks (fastest) | `subagent_type="general"`; no approvals/architecture decisions | Low |
+| Mode | Tag | Use | Effort |
+|------|-----|-----|--------|
+| T1 | `[T1:deep]` | PRD/FRD/ERD, plans, reviews (highest rigor) | High |
+| T2 | `[T2:balanced]` | Implementation, fixes, QA (default) | Medium |
+| T3 | `[T3:quick]` | Logs/status/lightweight checks only | Low |
 
 OpenCode/OpenAI compatibility:
 
-- `T1/T2/T3` are orchestration modes (effort/risk), not Claude-specific model names.
-- If OpenCode runtime variants are configured, map modes to effort levels on the same base model (`T1=high`, `T2=medium`, `T3=low`).
-- If effort variants are unavailable, keep the same model and express mode through prompt strictness, evidence requirements, and review depth.
-- Downgrade mode (`T1` -> `T2` -> `T3`) only when blocked by time/tooling constraints, and record the reason in logs.
+- `T1/T2/T3` are orchestration modes (effort/risk), not model names.
+- Task mapping: use `subagent_type="general"` for delivery/review work; use `subagent_type="explore"` with `very thorough` only for repo discovery.
+- If effort variants exist, map `T1=high`, `T2=medium`, `T3=low`; otherwise keep one model and enforce mode by prompt strictness/evidence depth.
+- Downgrade `T1 -> T2 -> T3` only when blocked by time/tooling constraints; record reason in logs.
 
 ### Gate Ownership (CRITICAL)
 
-- All `**GATE**: User approves ...` steps are owned by the orchestrator in the **primary chat session**.
-- Never delegate user approval requests to subagents, Task tool runs, or agent prompt files.
-- Subagents may only return `READY_FOR_APPROVAL` with evidence; orchestrator must surface it and wait for user response.
-- On resume, if a user-approval gate is pending, surface it immediately before spawning any new subagents.
+- User-approval gates are owned by orchestrator in the **primary chat session**.
+- Never delegate approval requests to subagents, Task runs, or prompt files.
+- Subagents may return `READY_FOR_APPROVAL` + evidence only; orchestrator surfaces it and waits.
+- On resume, surface pending user-approval gate before spawning new subagents.
 
 ---
 
@@ -92,7 +92,7 @@ OpenCode/OpenAI compatibility:
 
 ## Phase 4.5: Integration Verification (MANDATORY)
 
-**Purpose**: Catch "invisible" gaps - code exists but isn't wired/accessible. Stage 2 passing ≠ feature accessible.
+**Purpose**: Catch "invisible" gaps (code exists but is not wired/accessible). Stage 2 pass does not guarantee accessibility.
 
 30. **GATE**: All Phase 4 tasks COMPLETED with Stage 2 PASS
 31. `[T1]` Integration Reviewer → analyze PRD/FRD/ERD, verify by feature type:
@@ -106,7 +106,7 @@ OpenCode/OpenAI compatibility:
 | Full-stack | Frontend→Backend calls work end-to-end |
 | CLI | Commands registered, --help works |
 
-32. **Generate checklist** - explicit connection points:
+32. **Generate checklist** - explicit connection points, e.g.:
     - `[ ] UserService → AuthController | verify injection`
     - `[ ] ProfileCard → DashboardPage | verify import + render`
     - `[ ] /api/users/:id → router | verify route registered`
@@ -115,7 +115,7 @@ OpenCode/OpenAI compatibility:
     - **Web UI (MANDATORY)**: Playwright - navigate via user path (not direct URL), verify render, complete primary action
     - **API**: curl/test primary endpoint(s), verify response shape
     - **CLI**: run --help + basic invocation
-34. 🔴 Unreachable (code exists, not wired) → `[T2]` Fix → re-verify | 🟠 Partial → fix
+34. 🔴 Unreachable (exists, not wired) → `[T2]` fix → re-verify | 🟠 Partial → fix
 35. Max 3 iterations → escalate
 36. **GATE**: All integration points verified → Phase 4.6
 
@@ -123,9 +123,9 @@ OpenCode/OpenAI compatibility:
 
 ## Phase 4.6: Final Review (MANDATORY)
 
-**BLOCKING**: Must invoke `/review-changes` via Skill tool. Writing "Phase 4.6 PASSED" without skill invocation = violation.
+**BLOCKING**: Must invoke `/review-changes` via Skill tool. Claiming "Phase 4.6 PASSED" without invocation is a violation.
 
-**NO-HANG RULE**: Never wait indefinitely in this phase. If a reviewer call cannot run or does not return, mark `BLOCKED` with reason and execute fallback immediately.
+**NO-HANG RULE**: Never wait indefinitely. If reviewer call cannot run or does not return, mark `BLOCKED` with reason and execute fallback immediately.
 
 37. **GATE**: Phase 4.5 integration verification passed
 38. Execute: `Skill(skill="review-changes")` - wait for completion
@@ -185,12 +185,12 @@ OpenCode/OpenAI compatibility:
 
 ## Prompts
 
-All: 25+ yrs, machine-parseable output with IDs.
+All outputs: 25+ yrs distinguished/principal rigor, machine-parseable, stable IDs.
 
 ### PRD
 ```
 Persona: distinguished-product-manager | Output: docs/prds/{name}/{name}.md
-Design input: docs/prds/{name}/design.md (if exists)
+Design: docs/prds/{name}/design.md (optional)
 
 Meta: ID=PRD-{name} | Status=draft|approved | Size=S|M|L|XL | Deps=[systems]
 Problem: WHAT | WHO | WHY
@@ -231,10 +231,10 @@ Persona: .opencode/agent-types/{type}.md
 Refs: FR | AC | COMP | API
 Objective: {what + why}
 ACs: | AC-FR-{N} | given | when | then |
-TDD: 1.failing test 2.verify fail 3.minimal impl 4.verify pass 5.refactor 6.commit
+TDD: 1 failing test 2 verify fail 3 minimal impl 4 verify pass 5 refactor 6 commit
 Success: [ ]ACs [ ]test-first [ ]saw fail [ ]minimal [ ]green [ ]no regression
 Log: agent-logs/task{N}-phase{M}.md | status | refs | files | tests | blockers
-Approval: if a gate is reached, return READY_FOR_APPROVAL + evidence; do not prompt user directly
+Approval: at gate, return READY_FOR_APPROVAL + evidence; never prompt user directly
 ```
 
 ### Stage 1: Spec Compliance
@@ -242,14 +242,14 @@ Approval: if a gate is reached, return READY_FOR_APPROVAL + evidence; do not pro
 Persona: distinguished-requirements-reviewer
 Task: {id} | Files: {changed} | Refs: FR, AC
 Matrix: | AC-ID | criteria | PASS/FAIL | evidence |
-Check: FRs impl | ACs satisfied | no scope creep | edges | errors
+Check: FR implemented | AC satisfied | no scope creep | edges | errors
 Output: result | compliance[] | issues[]
 ```
 
 ### Stage 2: Code Quality
 ```
 Persona: distinguished-code-reviewer | Prereq: Stage 1 PASS
-Check: TDD | clean | DRY | YAGNI | errors | coverage
+Check: TDD | clean code | DRY | YAGNI | errors | coverage
 QA (web): Playwright MCP
 Output: result | issues[{sev,cat,loc,desc,fix}]
 ```
@@ -262,11 +262,11 @@ Refs: PRD/FRD/ERD, execution-plan.md
 1. Classify: Backend | Frontend | Full-stack | CLI
 2. Map connections: | Source | Target | Type (import/inject/register) | Status |
 3. Code trace: entry point → ... → implementation (missing link = 🔴)
-4. Verify accessibility:
-   - Web UI: Playwright - user navigation path, render check, primary action
-   - API: execute endpoint, verify response
+4. Verify access:
+   - Web UI: Playwright user path, render check, primary action
+   - API: execute primary endpoint(s), verify response shape
    - CLI: --help + basic invocation
-   - Backend: trace from controller/handler to service
+   - Backend: trace controller/handler → service
 
 Output: result=PASS|FAIL | checklist[{source,target,type,status,evidence}] | issues[{sev,desc,missing}]
 ```
