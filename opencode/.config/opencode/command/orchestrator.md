@@ -127,13 +127,19 @@ OpenCode/OpenAI compatibility:
 
 **NO-HANG RULE**: Never wait indefinitely. If reviewer call cannot run or does not return, mark `BLOCKED` with reason and execute fallback immediately.
 
+**AUTONOMY RULE**: Phase 4.6 runs without user interaction. Do not open approval/clarification gates while iterating review findings.
+
 37. **GATE**: Phase 4.5 integration verification passed
 38. Execute: `Skill(skill="review-changes")` - wait for completion
     - Scope: all changed files (git diff from feature start)
     - Required: Architect, SME, Security reviewers
     - If skill unavailable/fails/times out: run equivalent `[T1]` parallel reviewers via Task tool and aggregate findings in primary session
-39. Findings: 🔴🟠 → `[T2]` Fix → re-run `/review-changes` | 🔵 → document
-40. Max 3 iterations → escalate
+39. Findings loop (autonomous):
+    - 🔴🟠 → spawn `[T2]` fix agents immediately (parallel for independent issues, serial for dependent issues)
+    - Re-run `/review-changes` immediately after fixes
+    - Repeat until no 🔴🟠 or max iterations reached
+    - Never request user input in this loop
+40. Max 3 iterations → mark `BLOCKED` with unresolved issues + evidence; continue to Phase 5 only after loop exits with zero 🔴🟠
 41. **GATE**: All 🔴🟠 resolved → Phase 5
 
 ---
@@ -234,7 +240,7 @@ ACs: | AC-FR-{N} | given | when | then |
 TDD: 1 failing test 2 verify fail 3 minimal impl 4 verify pass 5 refactor 6 commit
 Success: [ ]ACs [ ]test-first [ ]saw fail [ ]minimal [ ]green [ ]no regression
 Log: agent-logs/task{N}-phase{M}.md | status | refs | files | tests | blockers
-Approval: at gate, return READY_FOR_APPROVAL + evidence; never prompt user directly
+Approval: return `READY_FOR_APPROVAL` only when orchestrator explicitly marks a user-approval gate; otherwise return `DONE` + evidence; never prompt user directly
 ```
 
 ### Stage 1: Spec Compliance
