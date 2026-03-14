@@ -1,7 +1,31 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  // "plugin": ["@tarquinen/opencode-dcp@latest"],
   "small_model": "synthetic/hf:zai-org/GLM-4.7-Flash",
+  "permission": {
+    "read": {
+      "~/.ssh/**": "deny",
+      "**/.env*": "deny",
+      "**/.env.example": "allow"
+    },
+    "edit": {
+      "~/.ssh/**": "deny",
+      "**/.env*": "deny",
+      "**/.env.example": "allow"
+    },
+    "glob": {
+      "~/.ssh/**": "deny",
+      "**/.env*": "deny",
+      "**/.env.example": "allow"
+    },
+    "grep": {
+      "~/.ssh/**": "deny",
+      "**/.env*": "deny",
+      "**/.env.example": "allow"
+    },
+    "list": {
+      "~/.ssh/**": "deny"
+    }
+  },
   "mode": {
       "t1": {
         "model": "openai/gpt-5.3-codex",
@@ -15,7 +39,7 @@
         "model": "openai/gpt-5.3-codex",
         "variant": "medium"
       }
-  },
+    },
   "mcp": {
       "playwright": {
         "type": "local",
