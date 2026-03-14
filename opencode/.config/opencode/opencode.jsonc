@@ -1,17 +1,19 @@
 {
   "$schema": "https://opencode.ai/config.json",
   // "plugin": ["@tarquinen/opencode-dcp@latest"],
+  "small_model": "synthetic/hf:zai-org/GLM-4.7-Flash",
   "mode": {
       "t1": {
         "model": "openai/gpt-5.3-codex",
-        "variant": "high"
+        "variant": "xhigh"
       },
       "t2": {
         "model": "openai/gpt-5.3-codex",
-        "variant": "medium"
+        "variant": "high"
       },
       "t3": {
-        "model": "openai/gpt-5.3-codex-spark",
+        "model": "openai/gpt-5.3-codex",
+        "variant": "medium"
       }
   },
   "mcp": {

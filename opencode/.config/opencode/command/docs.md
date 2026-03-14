@@ -23,9 +23,10 @@ Run inline spot checks against documentation health.
 8. **Validate PRD capabilities**: `docs/prds/capabilities.md` matches actual PRD dirs
    - Each PRD has matching `docs/prds/{name}/` dir
    - Status reflects actual state, completed have `completion-summary.md`
-   - In-progress have `agent-prompts/`, `agent-logs/`
+   - In-progress have approved PRD; `M/L/XL` also have `execution-plan.md`
+   - During active orchestration, root `agent-prompts/` and `agent-logs/` may exist as ephemeral artifacts
 9. **Validate PRD cross-refs**: PRDs reference correct arch/requirements docs
-   - FRD/ERD align with docs/architecture.md, requirements traceable
+   - PRD technical sections align with docs/architecture.md, requirements traceable
 
 ### Output
 
@@ -74,12 +75,13 @@ Executes 20-task audit via `/orchestrator update-documentation`:
 ### PRD Cross-Checks
 
 - `docs/prds/capabilities.md` status matches actual PRD dirs
-- Completed PRDs have `completion-summary.md`, no orphan logs/prompts
-- In-progress PRDs have valid `agent-prompts/`, `agent-logs/`
-- FRD/ERD align with docs/architecture.md patterns
+- Completed PRDs have `completion-summary.md`, no orphan root-level ephemeral logs/prompts
+- In-progress PRDs have approved PRD; `M/L/XL` also have `execution-plan.md`
+- During active orchestration, root `agent-prompts/` and `agent-logs/` may exist as ephemeral artifacts
+- PRD technical sections align with docs/architecture.md patterns
 - PRD requirements traceable to docs/requirements.md
 
 ### Output
 
 - `docs/prds/update-documentation/completion-summary.md`: findings, top 10 issues, prioritized files, action items, metrics
-- `docs/prds/update-documentation/agent-logs/`: detailed logs (deleted on completion)
+- `agent-logs/`: detailed logs (ephemeral; deleted on completion or archived on failure)
