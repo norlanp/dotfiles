@@ -27,7 +27,7 @@ Cycle: failing test → run (watch fail) → minimal code → run (watch pass) �
 
 ### Docs
 - All docs in `docs/` (requirements.md, architecture.md)
-- PRDs: `docs/prds/{featureName}/`, status in `docs/prds/capabilities.md`
+- PRDs: `docs/prds/{featureName}/`, status in `docs/capabilities.md`
 - PRD statuses: draft → approved → planning → in-progress → completed
 - **Always invoke `/orchestrator [feature-name]` to create PRDs**
 

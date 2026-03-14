@@ -93,7 +93,7 @@ I recommend A because [reasoning]. What do you think?
 
 1. Create `docs/prds/{name}/` if missing
 2. Write validated design to `docs/prds/{name}/design.md`
-3. Update `docs/prds/capabilities.md` → add entry with status=`brainstormed`
+3. Update `docs/capabilities.md` → add entry with status=`brainstormed`
 
 **Design doc format:**
 ```markdown

@@ -33,7 +33,7 @@ OpenCode/OpenAI compatibility:
 
 ## Phase 1: Init (MANDATORY)
 
-1. Feature: arg → use | none → scan `docs/prds/capabilities.md` | kebab-case
+1. Feature: arg → use | none → scan `docs/capabilities.md` | kebab-case
 2. Create `.opencode/agent-types/` if missing
 3. **RESUME**: Scan PRD/plan → resume from current state
 4. **DESIGN**: `docs/prds/{name}/design.md` exists? → PM uses as input

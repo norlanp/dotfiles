@@ -20,7 +20,7 @@ Run inline spot checks against documentation health.
 5. **Validate links**: docs/ links resolve
 6. **Check code blocks**: have language identifiers
 7. **Verify terminology**: consistent naming across files
-8. **Validate PRD capabilities**: `docs/prds/capabilities.md` matches actual PRD dirs
+8. **Validate PRD capabilities**: `docs/capabilities.md` matches actual PRD dirs
    - Each PRD has matching `docs/prds/{name}/` dir
    - Status reflects actual state, completed have `completion-summary.md`
    - In-progress have approved PRD; `M/L/XL` also have `execution-plan.md`
@@ -74,7 +74,7 @@ Executes 20-task audit via `/orchestrator update-documentation`:
 
 ### PRD Cross-Checks
 
-- `docs/prds/capabilities.md` status matches actual PRD dirs
+- `docs/capabilities.md` status matches actual PRD dirs
 - Completed PRDs have `completion-summary.md`, no orphan root-level ephemeral logs/prompts
 - In-progress PRDs have approved PRD; `M/L/XL` also have `execution-plan.md`
 - During active orchestration, root `agent-prompts/` and `agent-logs/` may exist as ephemeral artifacts
