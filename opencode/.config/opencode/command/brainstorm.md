@@ -9,9 +9,10 @@ Collaborative design exploration before formal requirements. Socratic questionin
 ## Phase 1: Context
 
 1. Feature: arg → use | none → ask | kebab-case
-2. Check `docs/prds/{name}/` exists → resume or fresh
+2. Create dirs: `.opencode/`, `docs/prds/{name}/`
 3. Read: README, `docs/architecture.md`, recent commits, related code
-4. State: "Starting brainstorm for {name}. Let me understand what we're building."
+4. Check `docs/prds/{name}/design.md` exists → resume or fresh
+5. State: "Starting brainstorm for {name}. Let me understand what we're building."
 
 ---
 
@@ -91,9 +92,9 @@ I recommend A because [reasoning]. What do you think?
 
 ## Phase 5: Save & Handoff
 
-1. Create `docs/prds/{name}/` if missing
-2. Write validated design to `docs/prds/{name}/design.md`
-3. Update `docs/capabilities.md` → add entry with status=`brainstormed`
+1. Write validated design to `docs/prds/{name}/design.md`
+2. Update `docs/capabilities.md` → add entry with status=`brainstormed`
+3. Initialize `docs/prds/{name}/todos.json` with status `init` (orchestrator will populate)
 
 **Design doc format:**
 ```markdown
@@ -147,10 +148,10 @@ Which would you like?
 ## Integration with Orchestrator
 
 When `/orchestrator {name}` runs:
-- Phase 1 checks for existing `design.md`
-- If found: PM agent reads design.md as input for PRD
+- Phase 1 loads `todos.json` → auto-resumes if status != `init`
+- If `design.md` exists: PM reads as PRD input
+- If fresh: starts from discovery
 - Design decisions flow into formal requirements
-- No duplicate discovery work
 
 ---
 

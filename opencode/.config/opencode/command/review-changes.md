@@ -29,7 +29,7 @@ OpenCode/OpenAI compatibility:
      3. branch range from merge-base with base branch (detect in order: `origin/main`, `origin/master`, `main`, `master`) when working tree is clean
      4. latest commit range (`HEAD~1..HEAD`) when base branch is unavailable
      5. initial-commit fallback: if `HEAD~1` does not exist, use `HEAD` as scope
-   - **If invoked from orchestrator** (Phase 4.6): Use uncommitted changes from feature implementation (git diff)
+    - **If invoked from orchestrator** (Phase 3): Use uncommitted changes from feature implementation (git diff)
    - If resolved scope has zero file changes, do not spawn reviewers; return `✅ APPROVED` with `Actions: none (nothing to review)`.
    - No user confirmation/questions during execution; report detected scope in final review header.
    - Include scope metadata in report: `source`, `base_branch` (if used), `commit_range` (if used), `files_changed`.
