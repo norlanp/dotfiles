@@ -28,11 +28,13 @@ Cycle: failing test → run (watch fail) → minimal code → run (watch pass) �
 ### Docs
 - All docs in `docs/` (requirements.md, architecture.md)
 - PRDs: `docs/prds/{featureName}/`, status in `docs/capabilities.md`
-- PRD statuses: draft → approved → planning → in-progress → completed
+- PRD statuses (`docs/capabilities.md`): brainstormed (optional, pre-PRD) → draft → approved → planning → in-progress → completed
+- Workflow status (`docs/prds/{featureName}/todos.json`): init → approved → planning → in_progress → completed
 - **Always invoke `/orchestrator [feature-name]` to create PRDs**
 
 ### Git
-- **Confirm with user before any git operation**
+- **Confirm with user before git write/destructive operations**
+- Read-only git commands are allowed when explicitly requested (for example `/review-changes`, `/docs`, `/debug`)
 - Format: `type: description` (feat/fix/docs/refactor/test/chore/style/perf)
 - No AI/agent mentions or Co-authored-by trailers - write as human
 

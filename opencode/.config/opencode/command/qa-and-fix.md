@@ -17,7 +17,11 @@
 ## Flow
 
 ### Phase 1: Setup
-1. Ask: "What to QA?" (feature/file/recent changes/project)
+1. Ask: "What should I QA first?" with choices:
+   - feature flow (recommended)
+   - specific file/module
+   - recent changes
+   - full project sweep
 2. Read README, arch docs
 
 ### Phase 2: QA (delegated)
@@ -32,7 +36,7 @@
    Output: issues (CRITICAL/MEDIUM/LOW) w/ file:line, passed checks
    ```
 4. If NEEDS_PLAYWRIGHT → orchestrator executes, reports back
-5. Present report → "Proceed to fix? [Y/n]"
+5. Present report → "Proceed to fix now? (recommended: yes) [Y/n]"
 
 ### Phase 3: Fix (delegated)
 6. `[T2:balanced]` Spawn fix agent:
@@ -41,8 +45,8 @@
    Issues: {from QA}
    
    For each (CRITICAL→MEDIUM→LOW):
-   - Root cause → design fix → implement → verify
-   - Follow agents.md philosophy
+    - Root cause → design fix → implement → verify
+    - Follow `AGENTS.md`/`agents.md` philosophy
    
    Output: fixed, files modified, deferred, PLAYWRIGHT_VALIDATION if needed
    ```
@@ -50,7 +54,7 @@
 8. Loop max 3x if validation fails
 
 ### Phase 4: Review
-9. `[T1:deep]` Spawn distinguished-code-reviewer + distinguished-architect → if CHANGES_NEEDED → fix agent → repeat
+9. `[T1:deep]` Spawn two `subagent_type="general"` review tasks with personas: Distinguished Code Reviewer + Distinguished Architect → if CHANGES_NEEDED → fix agent → repeat
 
 ### Phase 5: Output
 10. Save to `docs/hotfixes/{hotfix-id}/`: qa-report.md, fix-report.md, review-summary.md

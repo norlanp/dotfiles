@@ -4,6 +4,8 @@
 
 Systematic root cause analysis. **NO fixes without investigation first.**
 
+Invocation of `/debug` is treated as explicit approval for read-only git commands in the current repo (`git diff`, recent commits). Do not run git write/destructive operations.
+
 ---
 
 ## Iron Law

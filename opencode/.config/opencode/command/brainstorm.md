@@ -8,9 +8,10 @@ Collaborative design exploration before formal requirements. Socratic questionin
 
 ## Phase 1: Context
 
-1. Feature: arg → use | none → ask | kebab-case
+1. Feature: arg → use | none → ask with choices (new feature name, refine existing PRD, pick from capabilities) and recommend `new feature name` | kebab-case
 2. Create dirs: `.opencode/`, `docs/prds/{name}/`
 3. Read: README, `docs/architecture.md`, recent commits, related code
+   - Invocation of `/brainstorm` is treated as explicit approval for read-only git commands in the current repo (recent commits); no git write operations
 4. Check `docs/prds/{name}/design.md` exists → resume or fresh
 5. State: "Starting brainstorm for {name}. Let me understand what we're building."
 
@@ -136,9 +137,9 @@ I recommend A because [reasoning]. What do you think?
 Design saved to docs/prds/{name}/design.md
 
 Next steps:
-- `/orchestrator {name}` → Full PRD + planning + execution
+- `/orchestrator {name}` → Full PRD + planning + execution (recommended)
 - Continue brainstorming → Refine design further
-- Manual implementation → Use design as guide
+- Manual implementation (skip PRD governance) → Use design as guide
 
 Which would you like?
 ```
@@ -148,7 +149,7 @@ Which would you like?
 ## Integration with Orchestrator
 
 When `/orchestrator {name}` runs:
-- Phase 1 loads `todos.json` → auto-resumes if status != `init`
+- Phase 1 loads `todos.json` → auto-resumes only for `approved|planning|in_progress` (not `completed`)
 - If `design.md` exists: PM reads as PRD input
 - If fresh: starts from discovery
 - Design decisions flow into formal requirements

@@ -22,6 +22,8 @@ OpenCode/OpenAI compatibility:
 
 ## Flow
 
+Invocation of `/review-changes` is treated as explicit approval for read-only git commands in the current repo (`git status/diff/log`). Do not run git write/destructive operations without separate user confirmation.
+
 1. **Scope** (MANDATORY):
    - **If invoked directly** (`/review-changes`): Determine scope autonomously in this order:
      1. explicit scope argument (if provided)
@@ -29,7 +31,7 @@ OpenCode/OpenAI compatibility:
      3. branch range from merge-base with base branch (detect in order: `origin/main`, `origin/master`, `main`, `master`) when working tree is clean
      4. latest commit range (`HEAD~1..HEAD`) when base branch is unavailable
      5. initial-commit fallback: if `HEAD~1` does not exist, use `HEAD` as scope
-    - **If invoked from orchestrator** (Phase 3): Use uncommitted changes from feature implementation (git diff)
+   - **If invoked from orchestrator** (Phase 3): Use explicit file scope passed by orchestrator (current todo/task files). If absent, use filtered `git diff` limited to files touched in the current task; avoid unrelated pre-existing workspace changes.
    - If resolved scope has zero file changes, do not spawn reviewers; return `✅ APPROVED` with `Actions: none (nothing to review)`.
    - No user confirmation/questions during execution; report detected scope in final review header.
    - Include scope metadata in report: `source`, `base_branch` (if used), `commit_range` (if used), `files_changed`.
