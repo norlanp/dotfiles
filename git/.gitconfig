@@ -3,12 +3,12 @@
     email = norlan.perdomo@gmail.com
 
 [alias]
-    ps = !git push origin $(git branch --show-current)
+    ps = !git push origin $(git branch --show-current); git remote get-url backup1 >/dev/null 2>&1 && git push backup1 $(git branch --show-current) || echo "backup1 remote not configured - run: git remote add backup1 <url>"
     pl = pull --recurse-submodules
     d = diff
     cm = !git add --all && git commit -m
     co = !"f() { git checkout $1 2>/dev/null || git checkout -b $1; }; f"
-    c = !"f() { git add --all && git commit -m \"$1\" && git push origin $(git branch --show-current); }; f"
+    c = !"f() { git add --all && git commit -m \"$1\" && git push origin $(git branch --show-current); git remote get-url backup1 >/dev/null 2>&1 && git push backup1 $(git branch --show-current) || echo \"backup1 remote not configured - run: git remote add backup1 <url>\"; }; f"
     cleanup = !"f() { git fetch -p && git branch --merged | grep -v '*' | grep -v 'master' | xargs git branch -d; }; f"
     s = status
     us = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
