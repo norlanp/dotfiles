@@ -3,7 +3,7 @@
     email = norlan.perdomo@gmail.com
 
 [alias]
-    ps = !git push origin $(git branch --show-current); git remote get-url backup1 >/dev/null 2>&1 && git push backup1 $(git branch --show-current) || echo "backup1 remote not configured - run: git remote add backup1 <url>"
+	ps = "!git push origin $(git branch --show-current); git remote get-url backup1 >/dev/null 2>&1 && git push backup1 $(git branch --show-current) || echo \"backup1 remote not configured - run: git remote add backup1 <url>\""
     pl = pull --recurse-submodules
     d = diff
     cm = !git add --all && git commit -m
