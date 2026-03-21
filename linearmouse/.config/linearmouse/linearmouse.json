@@ -46,7 +46,7 @@
       },
       "scrolling" : {
         "acceleration" : {
-          "vertical" : 1
+          "vertical" : 0
         },
         "distance" : {
           "vertical" : "auto"
