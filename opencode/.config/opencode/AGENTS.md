@@ -29,8 +29,30 @@ Cycle: failing test → run (watch fail) → minimal code → run (watch pass) �
 - All docs in `docs/` (requirements.md, architecture.md)
 - PRDs: `docs/prds/{featureName}/`, status in `docs/capabilities.md`
 - PRD statuses (`docs/capabilities.md`): brainstormed (optional, pre-PRD) → draft → approved → planning → in-progress → completed
-- Workflow status (`docs/prds/{featureName}/todos.json`): init → approved → planning → in_progress → completed
+- Workflow status (`docs/prds/{featureName}/todos.json`): init → approved → planning → in-progress → completed
 - **Always invoke `/orchestrator [feature-name]` to create PRDs**
+
+### Ad hoc Sessions
+Track tasks in `todo.txt` at project root for work outside `/orchestrator`:
+
+**Format:**
+```
+[ ] open task @file:src/foo.py
+[x] completed task @file:src/bar.py
+```
+
+**Rules:**
+- Status: `[ ]` open, `[x]` completed
+- File references: `@file:path/to/file` (optional, links task to specific files)
+- Accumulates across sessions (not reset between sessions)
+
+**When to use:**
+- Ad hoc requests outside structured PRD workflows
+- Session continuity when returning to a project
+
+**When NOT to use:**
+- Use `/orchestrator [feature-name]` for features requiring PRD, planning, multiple sessions
+- todo.txt is for unstructured work; orchestrator is for structured work
 
 ### Git
 - **Confirm with user before git write/destructive operations**
