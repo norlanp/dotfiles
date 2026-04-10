@@ -9,8 +9,6 @@ export POETRY_VIRTUALENVS_IN_PROJECT=1
 # for some reason
 # export EDITOR=nvim
 
-# opencode
-export PATH=$HOME/norlan/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 
 #set history size
@@ -34,14 +32,8 @@ export PATH=$PATH:$HOME/go/bin
 bindkey "^[[A" history-beginning-search-backward
 bindkey "^[[B" history-beginning-search-forward
 
-source "$HOME/.cargo/env"
-
-eval "$(starship init zsh)"
-eval "$(/opt/homebrew/bin/mise activate zsh)"
+command -v starship &>/dev/null && eval "$(starship init zsh)"
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
 # bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
-
-
-# opencode
-export PATH=/Users/norlan/.opencode/bin:$PATH
+[ -f ~/.bun/_bun ] && source ~/.bun/_bun

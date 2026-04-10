@@ -2,3 +2,19 @@
 .DS_Store
 
 todo.txt
+
+# Security patterns
+.env
+.env.*
+!.env.example
+*_history
+id_rsa*
+*.pem
+*.key
+.netrc
+.pgpass
+credentials.json
+secrets.json
+
+# Generated files
+opencode/.config/opencode/package-lock.json

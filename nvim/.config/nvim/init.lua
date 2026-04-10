@@ -68,21 +68,7 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-sleuth',
 
-  -- NOTE: This is where your plugins related to LSP can be installed.
-  --  The configuration is done below. Search for lspconfig to find it below.
-  {
-    -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
-      'williamboman/mason-lspconfig.nvim',
-
-      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
-      -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
-    },
-  },
+  -- NOTE: LSP configuration is done below. Search for lspconfig to find it below.
 
   { -- Autocompletion
     'saghen/blink.cmp',
@@ -208,7 +194,9 @@ require('lazy').setup({
         theme = 'nord',
         component_separators = '|',
         section_separators = '',
-        path = 1,
+      },
+      sections = {
+        lualine_c = { { 'filename', path = 1 } },
       },
     },
   },
@@ -418,10 +406,8 @@ require('lazy').setup({
         --   })
         -- end
 
-        -- The following code creates a keymap to toggle inlay hints in your
-        -- code, if the language server you are using supports them
-        --
-        -- This may be unwanted, since they displace some of your code
+        -- Toggle inlay hints with <leader>th
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
           map('<leader>th', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
