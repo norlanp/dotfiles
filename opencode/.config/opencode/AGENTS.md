@@ -79,18 +79,6 @@ No rationalizations: "test after", "too simple", "keep as reference", "just this
 - Status flow: brainstormed → draft → approved → planning → in-progress → completed
 - Use `/orchestrator [name]` to create PRDs
 
-## Ad hoc Tasks
-
-Track in `todo.txt` at project root:
-
-```
-[ ] open task @file:src/foo.py
-[x] done task @file:src/bar.py
-```
-
-- Use for unstructured work; use `/orchestrator` for structured/multi-session work
-- Persists across sessions
-
 ## Git
 
 - Confirm before write/destructive operations
