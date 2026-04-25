@@ -1,0 +1,75 @@
+---
+name: qa-and-fix
+description: Standalone QA investigation and fix workflow
+---
+
+# QA and Fix
+
+`/qa-and-fix` - Standalone QA + fixes
+
+**NOTE**: For ad-hoc QA only. Under `/orchestrator`, use inline QA Gate instead.
+
+## Model Tiers
+- Inherit tier semantics from `/orchestrator`.
+- `T1` = deep review rigor, `T2` = balanced execution/fixes, `T3` = quick triage only.
+- Task tool mapping: `subagent_type="general"`; if effort variants exist use `T1=high`, `T2=medium`, `T3=low`, else enforce via prompt depth/evidence.
+
+## Agents
+- **Orchestrator**: Coordinate, Playwright fallback
+- **QA Agent**: Distinguished QA Engineer (25+ yrs) - investigate, test, validate
+- **Fix Agent**: Distinguished Engineer (25+ yrs) - root cause, fix
+
+## Flow
+
+### Phase 1: Setup
+1. Ask: "What should I QA first?" with choices:
+   - feature flow (recommended)
+   - specific file/module
+   - recent changes
+   - full project sweep
+2. Read README, arch docs
+
+### Phase 2: QA (delegated)
+3. `[T2:balanced]` Spawn QA agent:
+   ```
+   Persona: Distinguished QA Engineer (25+ yrs)
+   Scope: {user-defined}
+   
+   Check: functional, code quality, integration, tests, docs, security/perf
+   Playwright (web): try MCP → fail? return NEEDS_PLAYWRIGHT + scenarios
+   
+   Output: issues (CRITICAL/MEDIUM/LOW) w/ file:line, passed checks
+   ```
+4. If NEEDS_PLAYWRIGHT → orchestrator executes, reports back
+5. Present report → "Proceed to fix now? (recommended: yes) [Y/n]"
+
+### Phase 3: Fix (delegated)
+6. `[T2:balanced]` Spawn fix agent:
+   ```
+   Persona: Distinguished Engineer (25+ yrs)
+   Issues: {from QA}
+   
+   For each (CRITICAL→MEDIUM→LOW):
+    - Root cause → design fix → implement → verify
+    - Follow `AGENTS.md`/`agents.md` philosophy
+   
+   Output: fixed, files modified, deferred, PLAYWRIGHT_VALIDATION if needed
+   ```
+7. If Playwright validation → orchestrator executes
+8. Loop max 3x if validation fails
+
+### Phase 4: Review
+9. `[T1:deep]` Spawn two `subagent_type="general"` review tasks with personas: Distinguished Code Reviewer + Distinguished Architect → if CHANGES_NEEDED → fix agent → repeat
+
+### Phase 5: Output
+10. Save to `docs/hotfixes/{hotfix-id}/`: qa-report.md, fix-report.md, review-summary.md
+
+## Responsibilities
+
+| Task | Owner |
+|------|-------|
+| User interaction | Orchestrator |
+| QA investigation | QA Agent |
+| Fix implementation | Fix Agent |
+| Playwright testing | QA Agent (orchestrator fallback) |
+| Code review | Review Agents |
