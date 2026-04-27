@@ -10,7 +10,7 @@ description: Documentation health check and maintenance
 | Mode | Time | Description |
 |------|------|-------------|
 | `quick` (default) | <5 min | Fast spot check - 9 inline checks |
-| `full` | 2-3h | Comprehensive 5-phase audit via orchestrator |
+| `full` | 2-3h | Comprehensive 5-phase audit |
 
 ## Quick Mode
 
@@ -59,9 +59,7 @@ Short-term: [ ] ...
 
 ## Full Mode
 
-Comprehensive audit via orchestrator. Usage: `/docs full`
-
-Executes 20-task audit via `/orchestrator update-documentation` when PRD workflow is available; otherwise run equivalent inline full audit without orchestration:
+Comprehensive inline audit. Usage: `/docs full`
 
 - **Phase 1** (Parallel): Core docs (README, docs/architecture.md, docs/requirements.md, SETUP)
 - **Phase 2** (Parallel): Component/module docs

@@ -209,5 +209,5 @@ After systematic investigation, document:
 ## Integration
 
 - Use with `/qa-and-fix` when QA finds issues
-- Fix agents in `/orchestrator` follow this methodology
+- Fix agents follow this methodology
 - Spawned debug agents use this as their playbook

@@ -77,7 +77,7 @@ No rationalizations: "test after", "too simple", "keep as reference", "just this
 - All docs in `docs/`
 - PRDs at `docs/prds/{name}/`, status in `docs/capabilities.md`
 - Status flow: brainstormed → draft → approved → planning → in-progress → completed
-- Use `/orchestrator [name]` to create PRDs
+- Use design docs in `docs/prds/{name}/design.md` as implementation guides
 
 ## Git
 

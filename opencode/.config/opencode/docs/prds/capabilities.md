@@ -13,14 +13,12 @@ Tracking available commands and their status.
 | `/docs full` | active | Comprehensive 5-phase audit (2-3h) |
 | `/engineer` | active | Implementation agent for tasks |
 | `/kill-servers` | active | Terminate background dev servers |
-| `/orchestrator` | active | Meta-command, coordinates other agents |
 | `/qa-and-fix` | active | Test-driven bug fixes |
 | `/review-changes` | active | Code review and improvement |
 | `/trade-copier-follower-calculation` | active | Trade copier follower math |
 
 ## Command Types
 
-- **Meta**: `/orchestrator` - coordinates other agents
 - **Core**: `/brainstorm`, `/engineer`, `/qa-and-fix`, `/review-changes`
 - **Utility**: `/debug`, `/docs`, `/kill-servers`
 - **Domain**: `/trade-copier-follower-calculation`

@@ -7,10 +7,7 @@ description: Standalone QA investigation and fix workflow
 
 `/qa-and-fix` - Standalone QA + fixes
 
-**NOTE**: For ad-hoc QA only. Under `/orchestrator`, use inline QA Gate instead.
-
 ## Model Tiers
-- Inherit tier semantics from `/orchestrator`.
 - `T1` = deep review rigor, `T2` = balanced execution/fixes, `T3` = quick triage only.
 - Task tool mapping: `subagent_type="general"`; if effort variants exist use `T1=high`, `T2=medium`, `T3=low`, else enforce via prompt depth/evidence.
 
@@ -55,7 +52,7 @@ description: Standalone QA investigation and fix workflow
    
    Output: fixed, files modified, deferred, PLAYWRIGHT_VALIDATION if needed
    ```
-7. If Playwright validation → orchestrator executes
+7. If Playwright validation → execute directly
 8. Loop max 3x if validation fails
 
 ### Phase 4: Review
@@ -68,8 +65,8 @@ description: Standalone QA investigation and fix workflow
 
 | Task | Owner |
 |------|-------|
-| User interaction | Orchestrator |
+| User interaction | Primary session |
 | QA investigation | QA Agent |
 | Fix implementation | Fix Agent |
-| Playwright testing | QA Agent (orchestrator fallback) |
+| Playwright testing | QA Agent (primary fallback) |
 | Code review | Review Agents |

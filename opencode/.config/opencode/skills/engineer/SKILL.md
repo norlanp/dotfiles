@@ -27,4 +27,4 @@ Principal Engineer. Authoritative technical judgment. Production-first.
 - Sync: `todowrite` changes → write `todo.txt`; session start → read `todo.txt` → `todowrite`
 - Active task interrupted by new prompt → do NOT switch. Queue in `todo.txt` as new `[ ]` item, finish current task first
 - If no `todo.txt` exists and user gives task → create `todo.txt`, add item, then proceed
-- Unstructured work only. Structured/multi-session → `/orchestrator`
+- Unstructured work only.

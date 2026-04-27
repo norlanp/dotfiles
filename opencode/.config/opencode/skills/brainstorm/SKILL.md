@@ -7,7 +7,7 @@ description: Collaborative design exploration before formal requirements
 
 `/brainstorm [feature-name]`
 
-Collaborative design exploration before formal requirements. Socratic questioning → validated design → handoff to orchestrator.
+Collaborative design exploration before formal requirements. Relentless questioning until shared understanding, then validated design → implementation.
 
 ---
 
@@ -22,24 +22,33 @@ Collaborative design exploration before formal requirements. Socratic questionin
 
 ---
 
-## Phase 2: Discovery
+## Phase 2: Discovery (Grill Mode)
 
 **Rules:**
-- ONE question per message (never multiple)
+- **ONE** question per message (never multiple)
 - Prefer multiple-choice when possible (easier to answer)
 - Open-ended OK for exploration
 - If topic needs depth, break into sequential questions
+- **For each question, provide your recommended answer.**
+- **Explore the codebase instead of asking** when the question can be answered by inspection
+- Walk down each branch of the design tree, resolving dependencies between decisions one-by-one
+- Do not stop until shared understanding is reached
 
 **Focus areas:**
 - Purpose: What problem does this solve?
 - Users: Who uses it? How?
+- Size: Estimate scope
+  - `S` (<3 changes) → implement directly
+  - `M` (3-7 changes) → write plan first
+  - `L` (8-15 changes) → write plan first
+  - `XL` (15+ changes) → write plan first
 - Constraints: What must it integrate with?
 - Success: How do we know it works?
 - Edge cases: What could go wrong?
 
 **Example flow:**
 ```
-Q1: "What's the main problem this solves? 
+Q1: "What's the main problem this solves?
     (a) Performance issue (b) Missing feature (c) UX improvement (d) Other"
 
 Q2: "Who's the primary user?
@@ -96,68 +105,51 @@ I recommend A because [reasoning]. What do you think?
 
 ---
 
-## Phase 5: Save & Handoff
+## Phase 5: Save & Outcome
 
 1. Write validated design to `docs/prds/{name}/design.md`
 2. Update `docs/capabilities.md` → add entry with status=`brainstormed`
-3. Initialize `docs/prds/{name}/todos.json` with status `init` (orchestrator will populate)
 
-**Design doc format:**
-```markdown
-# {Feature Name} Design
+### Small (`S`)
 
-**Status:** Brainstormed  
-**Date:** YYYY-MM-DD  
-**Participants:** User, AI
-
-## Problem Statement
-[What problem this solves]
-
-## Goals
-- [Goal 1]
-- [Goal 2]
-
-## Approach
-[Selected approach with rationale]
-
-### Alternatives Considered
-- **Option B:** [Why not chosen]
-- **Option C:** [Why not chosen]
-
-## Architecture
-[Components, data flow]
-
-## Error Handling
-[Edge cases, failure modes]
-
-## Testing Strategy
-[How to verify it works]
-
-## Open Questions
-[Unresolved items, if any]
-```
-
-4. **Handoff prompt:**
+3. Status → `in-progress`
+4. Proceed to implement immediately — no plan needed
+5. **Prompt:**
 ```
 Design saved to docs/prds/{name}/design.md
 
-Next steps:
-- `/orchestrator {name}` → Full PRD + planning + execution (recommended)
-- Continue brainstorming → Refine design further
-- Manual implementation (skip PRD governance) → Use design as guide
-
-Which would you like?
+Feature is small. Starting implementation now.
 ```
 
----
+### Medium/Large/XL (`M`/`L`/`XL`)
 
-## Integration with Orchestrator
+3. Write `{name}-plan.md` to `docs/prds/{name}/`
+4. Update `docs/capabilities.md` → status `planning`
+5. **Prompt:**
+```
+Design saved to docs/prds/{name}/design.md
+Plan saved to docs/prds/{name}/{name}-plan.md
 
-When `/orchestrator {name}` runs:
-- Phase 1 loads `todos.json` → auto-resumes only for `approved|planning|in_progress` (not `completed`)
-- If `design.md` exists: PM reads as PRD input
-- If fresh: starts from discovery
-- Design decisions flow into formal requirements
+Ready to implement.
+```
+
+**Plan format:**
+```markdown
+# {Feature} Plan
+
+**Size:** {M|L|XL}
+**Date:** YYYY-MM-DD
+
+## Implementation Order
+1. [Step 1]
+2. [Step 2]
+
+## Key Risks
+- [Risk 1] → mitigation
+
+## Verification
+- [ ] Criteria
+```
 
 ---
 
