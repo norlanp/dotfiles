@@ -21,6 +21,8 @@ NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
 
 Quick patches mask underlying issues. Random fixes waste time and create new bugs.
 
+Investigation is always required. Tests before fixing are required for meaningful code (business logic, public APIs, edge cases). For trivial or boilerplate fixes, tests are optional.
+
 ---
 
 ## Phase 1: Root Cause Investigation
@@ -37,7 +39,7 @@ Quick patches mask underlying issues. Random fixes waste time and create new bug
 - Can you trigger it reliably?
 - What are the exact steps?
 - Does it happen every time?
-- Not reproducible? → gather more data, don't guess
+- Not reproducible? Don't guess, gather more data
 
 ### 3. Check Recent Changes
 - `git diff`, recent commits
@@ -103,7 +105,7 @@ THEN investigate that specific component
 - Don't fix multiple things at once
 
 ### 3. Verify Before Continuing
-- Did it work? Yes → Phase 4
+- Did it work? Yes, Phase 4
 - Didn't work? Form NEW hypothesis
 - DON'T add more fixes on top
 
@@ -116,10 +118,22 @@ THEN investigate that specific component
 
 ## Phase 4: Implementation
 
-### 1. Create Failing Test Case
-- Simplest possible reproduction
-- Automated test if possible
-- MUST have before fixing
+### 1. Create Failing Test Case (When Required)
+
+**MUST create before fixing:**
+- Business logic changes
+- Public API behavior changes
+- Edge cases or complex algorithms
+- Regression-prone areas
+
+**SKIP for:**
+- Trivial getters/setters
+- Generated code
+- Thin wrappers with no logic
+- Typo fixes in non-logic code
+- Configuration-only changes
+
+When in doubt, create the test. Tests for meaningful code only.
 
 ### 2. Implement Single Fix
 - Address the root cause identified
@@ -134,7 +148,7 @@ THEN investigate that specific component
 ### 4. If Fix Doesn't Work
 - Count: How many fixes have you tried?
 - If < 3: Return to Phase 1, re-analyze
-- **If ≥ 3: STOP and question the architecture**
+- **If >= 3: STOP and question the architecture**
 
 ### 5. Architecture Check (3+ Failed Fixes)
 
@@ -172,9 +186,9 @@ If you catch yourself:
 | "Issue is simple" | Simple issues have root causes too |
 | "Emergency, no time" | Systematic is FASTER than thrashing |
 | "Just try this first" | First fix sets the pattern. Do it right. |
-| "I'll write test after" | Untested fixes don't stick |
+| "I'll skip tests for this" | Meaningful code without tests breaks again |
 | "Multiple fixes saves time" | Can't isolate what worked |
-| "I see the problem" | Seeing symptoms ≠ understanding root cause |
+| "I see the problem" | Seeing symptoms != understanding root cause |
 
 ---
 
@@ -195,9 +209,9 @@ After systematic investigation, document:
 {Single, targeted fix addressing root cause}
 
 ### Verification
-- [ ] Failing test created
+- [ ] Failing test created (if meaningful code)
 - [ ] Fix implemented
-- [ ] Test passes
+- [ ] Test passes (or manual verification for trivial fixes)
 - [ ] No regressions
 
 ### Prevention

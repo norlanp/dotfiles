@@ -13,11 +13,11 @@ Collaborative design exploration before formal requirements. Relentless question
 
 ## Phase 1: Context
 
-1. Feature: arg → use | none → ask with choices (new feature name, refine existing PRD, pick from capabilities) and recommend `new feature name` | kebab-case
-2. Create dirs: `.opencode/`, `docs/prds/{name}/`
+1. Feature: arg → use | none → ask with choices (new feature name) and recommend `new feature name` | kebab-case
+2. Create dirs: `.opencode/`, `docs/designs/{name}/`
 3. Read: README, `docs/architecture.md`, recent commits, related code
    - Invocation of `/brainstorm` is treated as explicit approval for read-only git commands in the current repo (recent commits); no git write operations
-4. Check `docs/prds/{name}/design.md` exists → resume or fresh
+4. Check `docs/designs/{name}/design.md` exists → resume or fresh
 5. State: "Starting brainstorm for {name}. Let me understand what we're building."
 
 ---
@@ -107,28 +107,27 @@ I recommend A because [reasoning]. What do you think?
 
 ## Phase 5: Save & Outcome
 
-1. Write validated design to `docs/prds/{name}/design.md`
-2. Update `docs/capabilities.md` → add entry with status=`brainstormed`
+1. Write validated design to `docs/designs/{name}/design.md`
+2. Update `docs/features.md` → add entry (designs are saved and tracked there)
 
 ### Small (`S`)
 
-3. Status → `in-progress`
-4. Proceed to implement immediately — no plan needed
-5. **Prompt:**
+3. Proceed to implement immediately — no plan needed
+4. **Prompt:**
 ```
-Design saved to docs/prds/{name}/design.md
+Design saved to docs/designs/{name}/design.md
 
 Feature is small. Starting implementation now.
 ```
 
 ### Medium/Large/XL (`M`/`L`/`XL`)
 
-3. Write `{name}-plan.md` to `docs/prds/{name}/`
-4. Update `docs/capabilities.md` → status `planning`
+3. Write `{name}-plan.md` to `docs/designs/{name}/`
+4. Update `docs/features.md` → note plan exists
 5. **Prompt:**
 ```
-Design saved to docs/prds/{name}/design.md
-Plan saved to docs/prds/{name}/{name}-plan.md
+Design saved to docs/designs/{name}/design.md
+Plan saved to docs/designs/{name}/{name}-plan.md
 
 Ready to implement.
 ```
@@ -160,4 +159,4 @@ Ready to implement.
 - **Incremental validation** - Small chunks, confirm each
 - **YAGNI ruthlessly** - Cut features that aren't essential
 - **Explore alternatives** - Always 2-3 options before deciding
-- **Design ≠ PRD** - Design captures exploration; PRD captures requirements
+- **Design ≠ Requirements** - Design captures exploration; requirements capture decisions
