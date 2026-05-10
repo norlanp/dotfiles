@@ -38,6 +38,5 @@
         "enabled": true
       }
     },
-  "instructions": ["~/.config/opencode/caveman.md"],
   "snapshot": false
 }
