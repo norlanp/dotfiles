@@ -20,14 +20,14 @@ Adopt all that apply to the project. Missing recommended docs are flagged as �
 
 | Doc | Purpose | When to adopt |
 |-----|---------|---------------|
-| `terminology.md` (or `glossary.md`) | Domain terms, project jargon, abbreviations, ambiguous words with project-specific meaning. Prevents the agent from inventing or misinterpreting terms mid-task. | Any project with 2+ people, or 1+ week of work, or a non-trivial domain. |
+| `glossary.md` (or `terminology.md`) | Domain terms, project jargon, abbreviations, ambiguous words with project-specific meaning. Prevents the agent from inventing or misinterpreting terms mid-task. | Any project with 2+ people, or 1+ week of work, or a non-trivial domain. |
 | `code-map.md` | Semantic index of the codebase: what each module/folder is for, key entry points, public surface, where X kind of change usually lives. Maps intent → location. | Any codebase the agent navigates repeatedly. |
 | `architecture.md` | Current system shape only. Decisions/why live in ADRs. | Any project beyond a single module. |
 | `requirements.md` (or `spec.md`) | Product scope, what the product is (not what each release did). | Any product with a defined scope that outlives a single release. |
 | `docs/adr/` (MADR or Nygard format) | One file per non-obvious decision: context, decision, consequences. | Any project with 3+ decisions worth recording. |
 | `docs/runbooks/` | Operational procedures: deploy, rollback, incident response. | Any project with on-call, deploys, or external dependencies. |
 
-Discovery: scan for any of these filenames or directory names (case-insensitive, with common aliases: `glossary`, `domain.md`, `codebase-map.md`, `nav.md`, `system-design.md`, `spec.md`, `decisions/`). Report which baseline docs are present, missing, or stale.
+Discovery: scan for any of these filenames or directory names (case-insensitive, with common aliases: `terminology`, `domain.md`, `codebase-map.md`, `nav.md`, `system-design.md`, `spec.md`, `decisions/`). Report which baseline docs are present, missing, or stale.
 
 `prds/`, `audits/`, `hotfixes/`, `features.md` are **discovered categories** (not baseline) — flag them when present, ignore when absent.
 
@@ -67,7 +67,7 @@ Invocation of `/docs` is treated as explicit approval for read-only git operatio
    3. **Broken cross-refs** - any `[text](path.md)` or `path.md` mention in any doc that does not resolve to an existing file. Resolve paths relative to the referencing doc.
    4. **Baseline content checks**:
       - `code-map.md` paths resolve - every file/directory path it references must exist in the repo.
-      - `terminology.md` terms consistent - each defined term, when used in other docs, refers to the defined sense (spot-check high-traffic terms).
+      - `glossary.md` terms consistent - each defined term, when used in other docs, refers to the defined sense (spot-check high-traffic terms).
       - `architecture.md` vs ADRs - if an ADR contradicts current `architecture.md`, flag both directions.
       - `requirements.md` coverage - every feature in `features.md` traces back to a requirement, or is explicitly marked `unscoped`.
    5. **Feature status drift** - any `status:` value in feature docs that contradicts supporting evidence in the doc body (e.g. `status: removed` but a PRD still references it as active).
