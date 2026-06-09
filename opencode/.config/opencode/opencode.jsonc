@@ -35,9 +35,8 @@
           "--browser",
           "firefox"
         ],
-        "enabled": true
+        "enabled": false
       }
     },
-  "instructions": ["~/.config/opencode/caveman.md"],
   "snapshot": false
 }

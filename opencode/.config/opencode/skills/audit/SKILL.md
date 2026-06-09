@@ -5,9 +5,12 @@ description: Full-project code audit workflow: audit then fix
 
 # Audit
 
-`/audit [scope]` - Full-project code audit workflow (audit first, then fix)
+`/audit [scope] [guidance]` - Full-project code audit workflow (audit first, then fix)
 
 Broad repository audit for overall code health. Not change-scoped.
+
+- `scope` (optional): module/path to narrow audit. Defaults to full project sweep.
+- `guidance` (optional): free-form sentence to steer audit focus (e.g. focus areas, priorities, known concerns). Passed to all reviewers.
 
 ## Priority
 
@@ -43,16 +46,22 @@ Invocation of `/audit` is treated as explicit approval for read-only git command
    - Exclude generated/dependency artifacts: `.git/`, `node_modules/`, `dist/`, `build/`, `.next/`, `.cache/`, coverage artifacts, lockfile vendor caches.
    - If resolved scope has zero auditable files, return `APPROVED` with `Actions: none (nothing to audit)`.
 
-2. **Context** (MANDATORY):
+2. **Guidance** (OPTIONAL):
+   - Free-form sentence from the user to steer audit focus (e.g. specific areas, priorities, known concerns).
+   - If provided, pass verbatim to every reviewer sub-agent prompt so they weight findings accordingly.
+   - Guidance does not narrow scope — it prioritizes attention, not exclusion.
+
+3. **Context** (MANDATORY):
    - Read project context: `README`, `docs/architecture.md`, `docs/requirements.md` when present.
    - Inspect read-only git context (`git status/diff/log`) for recent risk areas (context only, not scope selection).
    - Detect domain and stack to select SMEs and specialists.
 
-3. **Pass 1 - Audit** (MANDATORY):
+4. **Pass 1 - Audit** (MANDATORY):
    - Spawn reviewers via Task tool:
      - Required: Distinguished Architect, Distinguished SME ({domain}), Distinguished Security Architect
      - Additional as needed: Performance, API, Data, Platform, UX specialists
    - Each reviewer covers all focus areas relevant to their domain.
+   - If user guidance was provided, include it verbatim in every reviewer prompt.
    - Each reviewer returns findings with: severity, file:line, **evidence** (exact code snippet or pattern), **impact** (concrete consequence), and recommended remediation.
    - **Evidence bar** (MANDATORY): drop any finding that cannot cite specific code evidence. No vague patterns ("could be improved"), no speculative risks ("might cause issues"). Every finding must answer: what is broken, where exactly, and what concrete failure it causes.
    - **Classification rule**: CRITICAL/MEDIUM = "this IS broken" (verifiable defect). LOW = "this could be better" (actionable suggestion). Do not ship speculative CRITICAL/MEDIUM findings.
@@ -61,25 +70,25 @@ Invocation of `/audit` is treated as explicit approval for read-only git command
      - no prompt escalation questions
      - assume-and-proceed for low-risk ambiguity with explicit assumptions
 
-4. **Audit Report** (MANDATORY):
+5. **Audit Report** (MANDATORY):
    - Consolidate and de-duplicate findings into one prioritized report.
    - **Merge rule**: overlapping findings from multiple reviewers merge into one entry with combined evidence and strongest severity.
    - Cap LOW findings at 5 — keep only most actionable.
    - If no actionable findings, return `APPROVED` and stop.
    - Otherwise present report and ask: `Proceed to fix now? (recommended: yes) [Y/n]`.
 
-5. **Pass 2 - Fix** (MANDATORY when approved):
+6. **Pass 2 - Fix** (MANDATORY when approved):
    - Delegate fixes by priority (CRITICAL -> MEDIUM -> LOW).
    - For each issue: root cause -> minimal targeted fix -> verification.
    - Run independent fixes in parallel; dependent fixes serially.
    - Validate with relevant tests/checks for changed areas.
 
-6. **Re-audit** (MANDATORY):
+7. **Re-audit** (MANDATORY):
    - Re-run reviewer pass on modified and adjacent high-risk areas.
    - If findings remain, iterate fix -> re-audit loop (max 3 rounds).
    - If still blocked after 3 rounds, return `CHANGES_NEEDED` with concrete missing context/actions.
 
-7. **Output** (MANDATORY, lightweight):
+8. **Output** (MANDATORY, lightweight):
    - Present concise summary: scope, top findings, actions taken, final verdict, open follow-ups.
 
 ## Report Format
