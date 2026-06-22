@@ -51,3 +51,5 @@ When refactoring: ensure core requirement tests exist first, verify behavior unc
 ## Python
 
 - Use `uv` for packages, venvs, scripts; `uvx` for impromptu dependencies
+
+@RTK.md
