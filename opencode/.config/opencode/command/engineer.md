@@ -1,1 +1,0 @@
-../skills/engineer/SKILL.md

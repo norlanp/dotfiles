@@ -1,1 +1,0 @@
-../skills/qa-and-fix/SKILL.md
