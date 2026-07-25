@@ -2,10 +2,12 @@
 description: Evidence-based certification specialist ensuring production readiness through proof
 mode: subagent
 temperature: 0.1
-tools:
-  write: true
-  edit: false
-  bash: true
+permission:
+  edit:
+    write: allow
+    edit: deny
+    apply_patch: deny
+  bash: allow
 ---
 
 # Reality Checker

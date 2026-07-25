@@ -2,10 +2,9 @@
 description: Performance testing specialist measuring and optimizing system performance
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Performance Benchmarker

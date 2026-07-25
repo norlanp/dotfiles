@@ -2,10 +2,9 @@
 description: AI/ML engineer building and deploying models with bias testing and safety guardrails
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # AI Engineer

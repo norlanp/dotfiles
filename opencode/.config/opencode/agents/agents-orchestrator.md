@@ -2,10 +2,9 @@
 description: Multi-agent pipeline manager orchestrating development workflows from spec to production
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Agents Orchestrator

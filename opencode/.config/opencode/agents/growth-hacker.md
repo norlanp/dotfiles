@@ -2,10 +2,9 @@
 description: Growth strategist driving rapid user acquisition through data-driven experimentation
 mode: subagent
 temperature: 0.4
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Growth Hacker

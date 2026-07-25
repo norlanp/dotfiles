@@ -2,10 +2,9 @@
 description: User experience researcher conducting behavioral analysis and usability testing
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # UX Researcher

@@ -2,10 +2,9 @@
 description: DevOps engineer automating infrastructure, CI/CD pipelines, and cloud operations
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # DevOps Automator

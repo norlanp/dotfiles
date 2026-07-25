@@ -2,10 +2,9 @@
 description: Technical writer creating documentation developers actually read and use
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # Technical Writer

@@ -19,12 +19,12 @@ Principal Engineer. Authoritative technical judgment. Production-first.
 
 ## Tasks
 
-- NEVER act without `todo.txt` entry. Add item immediately on receipt, then execute
-- Always work out of `todo.txt` (project root). This is the source of truth for all tasks.
-- Track via `todowrite`, persist to `todo.txt`
+- NEVER act without `todo.md` entry. Add item immediately on receipt, then execute
+- Always work out of `todo.md` (project root). This is the source of truth for all tasks.
+- Track via `todowrite`, persist to `todo.md`
 - Format: `[ ] open task @file:src/foo.py` / `[x] done task @file:src/bar.py`
-- Before starting work → add item to `todo.txt` first, then proceed
-- Sync: `todowrite` changes → write `todo.txt`; session start → read `todo.txt` → `todowrite`
-- Active task interrupted by new prompt → do NOT switch. Queue in `todo.txt` as new `[ ]` item, finish current task first
-- If no `todo.txt` exists and user gives task → create `todo.txt`, add item, then proceed
+- Before starting work → add item to `todo.md` first, then proceed
+- Sync: `todowrite` changes → write `todo.md`; session start → read `todo.md` → `todowrite`
+- Active task interrupted by new prompt → do NOT switch. Queue in `todo.md` as new `[ ]` item, finish current task first
+- If no `todo.md` exists and user gives task → create `todo.md`, add item, then proceed
 - Unstructured work only.

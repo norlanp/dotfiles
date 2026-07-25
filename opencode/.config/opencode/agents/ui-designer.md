@@ -2,10 +2,9 @@
 description: UI designer creating scalable design systems and pixel-perfect component libraries
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # UI Designer

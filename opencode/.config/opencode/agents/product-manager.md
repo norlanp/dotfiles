@@ -2,10 +2,9 @@
 description: Product leader owning full lifecycle from discovery through GTM and outcome measurement
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # Product Manager

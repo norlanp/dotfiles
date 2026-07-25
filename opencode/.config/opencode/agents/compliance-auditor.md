@@ -2,10 +2,9 @@
 description: Technical compliance auditor for SOC 2, ISO 27001, HIPAA, and PCI-DSS
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Compliance Auditor

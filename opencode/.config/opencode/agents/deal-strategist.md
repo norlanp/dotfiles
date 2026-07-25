@@ -2,10 +2,9 @@
 description: Senior deal strategist using MEDDPICC for complex B2B sales qualification and win planning
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # Deal Strategist

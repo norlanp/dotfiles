@@ -2,10 +2,9 @@
 description: Content strategist and creator for multi-platform campaigns and brand storytelling
 mode: subagent
 temperature: 0.4
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # Content Creator

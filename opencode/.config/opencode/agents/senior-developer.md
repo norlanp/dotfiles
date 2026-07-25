@@ -2,10 +2,9 @@
 description: Senior craftsperson building premium experiences with sophisticated patterns
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Senior Developer

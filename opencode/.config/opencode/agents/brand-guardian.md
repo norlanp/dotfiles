@@ -2,10 +2,9 @@
 description: Brand strategist creating cohesive identities and ensuring consistent expression
 mode: subagent
 temperature: 0.3
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # Brand Guardian

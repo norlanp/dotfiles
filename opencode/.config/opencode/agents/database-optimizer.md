@@ -2,10 +2,9 @@
 description: Database specialist optimizing schemas, queries, and indexes for performance
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Database Optimizer

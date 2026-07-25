@@ -2,10 +2,9 @@
 description: Developer advocate bridging product and developer communities through authentic engagement
 mode: subagent
 temperature: 0.4
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Developer Advocate

@@ -2,10 +2,9 @@
 description: Accessibility specialist auditing interfaces against WCAG with assistive technology testing
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: false
+permission:
+  edit: allow
+  bash: deny
 ---
 
 # Accessibility Auditor

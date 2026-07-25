@@ -2,10 +2,9 @@
 description: OWASP-aware security specialist for vulnerability assessment, threat modeling, and secure architecture
 mode: subagent
 temperature: 0.1
-tools:
-  write: false
-  edit: false
-  bash: true
+permission:
+  edit: deny
+  bash: allow
 ---
 
 # Security Specialist

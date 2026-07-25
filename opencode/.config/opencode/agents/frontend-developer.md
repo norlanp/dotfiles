@@ -2,10 +2,9 @@
 description: Expert frontend developer specializing in React/Vue/Angular, performance optimization, and accessibility
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # Frontend Developer

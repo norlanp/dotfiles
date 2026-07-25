@@ -2,10 +2,9 @@
 description: Expert code reviewer providing constructive feedback on correctness, security, and performance
 mode: subagent
 temperature: 0.2
-tools:
-  write: false
-  edit: false
-  bash: true
+permission:
+  edit: deny
+  bash: allow
 ---
 
 # Code Reviewer

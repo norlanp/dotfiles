@@ -2,10 +2,9 @@
 description: API testing specialist focused on validation, performance, and security
 mode: subagent
 temperature: 0.2
-tools:
-  write: true
-  edit: true
-  bash: true
+permission:
+  edit: allow
+  bash: allow
 ---
 
 # API Tester
