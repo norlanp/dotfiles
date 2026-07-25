@@ -17,7 +17,7 @@ Default: `quick docs/`. If arg 1 is not `quick` or `full`, treat it as `scope`.
 - `docs/requirements.md`: durable product requirements
 - `docs/code-map.md`: repo map and entry points
 - `docs/adr/`: decisions
-- `docs/runbooks/`: operations
+- `docs/runbooks/`: operations (conditional — only for projects with deployment/ops)
 
 Aliases (auto-detect, propose consolidation — never rename without per-file approval): `terminology.md`/`domain.md` → `glossary.md`, `spec.md` → `requirements.md`, `decisions/` → `adr/`, `architecture-notes.md`/`system.md` → `architecture.md`, `feature-log.md` → `features.md`, `ops/` → `runbooks/`.
 
