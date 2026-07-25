@@ -5,13 +5,14 @@ description: Kill dev servers started from CWD
 
 # Kill Servers
 
-`/kill-servers` - Kill dev servers started from CWD
+`/kill-servers` — Kill dev servers started from CWD.
 
 ## Flow
 
-1. Read package.json scripts, pyproject.toml, Makefile for dev/start commands
-2. Find processes matching those commands with CWD = current directory
-3. Confirm with default `Yes` (recommended), then SIGTERM → 3s → SIGKILL
+1. Read `package.json` scripts, `pyproject.toml`, `Makefile` for dev/start commands.
+2. Find processes matching those commands with CWD = current directory.
+3. No matches → report `No dev servers running from {cwd}`, stop.
+4. Confirm with default `Yes` (recommended), then SIGTERM → 3s → SIGKILL.
 
 ## Output
 
