@@ -36,6 +36,11 @@
           "firefox"
         ],
         "enabled": false
+      },
+      "trello":{
+        "type": "remote",
+        "url": "https://mcp.trello.com/v1",
+        "enabled": false
       }
     },
   "snapshot": false
