@@ -1,1 +1,0 @@
-../skills/review-changes/SKILL.md
