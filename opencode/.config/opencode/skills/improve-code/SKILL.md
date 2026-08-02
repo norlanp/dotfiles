@@ -58,7 +58,7 @@ Explore timeout → retry once stricter + contract; still blocked → `🔄 CHAN
 
 ## Out of scope (YAGNI)
 
-No proposing interfaces in Phase 3, code mods, running tests/build/lint, numerical scoring, cross-run tracking, perf/security/correctness bugs (→ `/review-changes`, `/debug`), forcing layers on layerless code (`✅ NOTHING TO REVIEW — no architectural layering detected`, stop), auto-creating ADRs, spawning >1 Explore.
+No proposing interfaces in Phase 3, code mods, running tests/build/lint, numerical scoring, cross-run tracking, perf/security/correctness bugs (→ `/review`, `/debug`), forcing layers on layerless code (`✅ NOTHING TO REVIEW — no architectural layering detected`, stop), auto-creating ADRs, spawning >1 Explore.
 
 ## Edge cases
 
