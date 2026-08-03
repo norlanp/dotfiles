@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Improve Code
 
-`/improve-code [path] [--arch=monolith|distributed|serverless]` — Read-only audit → HTML report of **deepening opportunities** (shallow modules → deep) → grilling loop on user's pick. No code mods in audit. Invocation implies read-only git approval (`status/diff/log`); no git write without separate confirmation.
+`/improve-code [path] [--arch=monolith|distributed|serverless] [--html]` — Read-only audit → report of **deepening opportunities** (shallow modules → deep) → grilling loop on user's pick. No code mods in audit. Invocation implies read-only git approval (`status/diff/log`); no git write without separate confirmation.
 
 ## Vocabulary (use exactly — no "component/service/API/boundary")
 
@@ -38,11 +38,11 @@ Tests (`*.test.*`, `*.spec.*`, `__tests__/`, `tests/`, `*_test.go`), migrations 
 
 Spawn one `subagent_type=Explore`. Walk scope organically, feel friction, no rigid heuristics. Look for: concept-bouncing across small modules (no locality); shallow modules; pure-for-testability extracts where bugs hide in call sites (no locality); seam leaks; untested/hard-to-test-through-interface; cross-layer calls the pattern says should be seamed. Apply **deletion test** to suspects.
 
-### 3. Report (HTML)
+### 3. Report
 
-Self-contained HTML to `$TMPDIR` (fallback `/tmp`/`%TEMP%`): `improve-code-<timestamp>.html`. Open it (`open`/`xdg-open`/`start`). Tell user absolute path. Tailwind via CDN for layout, Mermaid via CDN for graph-shaped, hand-built divs/SVG for editorial. Each candidate: before/after visualisation.
+**Default:** simple report rendered directly in the terminal/agent screen. Each candidate as a block: **Files** | **Problem** (vocab terms) | **Solution** (plain English) | **Benefits** (leverage+locality+testability) | **Strength** (`Strong`/`Worth exploring`/`Speculative`). Glossary vocab for domain, this skill's for architecture. End with **Top recommendation**. Don't propose interfaces yet. Ask: "Which would you like to explore?"
 
-Card: **Files** | **Problem** (vocab terms) | **Solution** (plain English) | **Benefits** (leverage+locality+testability) | **Before/After** | **Strength** (`Strong`/`Worth exploring`/`Speculative` badge). Glossary vocab for domain, this skill's for architecture. End with **Top recommendation**. Don't propose interfaces yet. Ask: "Which would you like to explore?"
+**`--html` flag** (opt-in): if the user passes `--html` (or asks for an HTML report), generate a self-contained HTML file to `$TMPDIR` (fallback `/tmp`/`%TEMP%`): `improve-code-<timestamp>.html`. Open it (`open`/`xdg-open`/`start`). Tell user absolute path. Tailwind via CDN for layout, Mermaid via CDN for graph-shaped, hand-built divs/SVG for editorial. Each candidate: before/after visualisation; include the same fields as the terminal block plus a **Before/After** section.
 
 ### 4. Grilling
 
@@ -54,7 +54,7 @@ No user prompts, no escalation, assume-and-proceed on low-risk reversible ambigu
 
 ## Failure handling
 
-Explore timeout → retry once stricter + contract; still blocked → `🔄 CHANGES_NEEDED` + missing-context list. HTML write fails → Markdown in terminal + note. No opener → print path. Not a repo → skip adaptive scope, scan whole/path arg, note reduced confidence.
+Explore timeout → retry once stricter + contract; still blocked → `🔄 CHANGES_NEEDED` + missing-context list. HTML write fails (when `--html`) → Markdown in terminal + note. No opener → print path. Not a repo → skip adaptive scope, scan whole/path arg, note reduced confidence.
 
 ## Out of scope (YAGNI)
 
