@@ -10,4 +10,5 @@ Use root `todo.md`; if absent, use root `todo.txt`. Do not search elsewhere or m
 1. Read the file and follow its existing status and dependency format.
 2. Select the first incomplete item with no incomplete explicit dependency.
 3. Mark it in progress, complete its work, then mark it complete. If blocked, leave it in progress and report the blocker.
-4. If no item is unblocked, report that and the blocking dependencies.
+4. After one item, halt and await user instructions. Do not start another item.
+5. If no item is unblocked, report that and the blocking dependencies.
