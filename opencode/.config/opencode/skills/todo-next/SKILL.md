@@ -7,8 +7,20 @@ description: Use for todo-next, work on the next todo item, or pick up the next 
 
 Use root `todo.md`; if absent, use root `todo.txt`. Do not search elsewhere or merge files.
 
-1. Read the file and follow its existing status and dependency format.
-2. Select the first incomplete item with no incomplete explicit dependency.
-3. Mark it in progress, complete its work, then mark it complete. If blocked, leave it in progress and report the blocker.
-4. After one item, halt and await user instructions. Do not start another item.
-5. If no item is unblocked, report that and the blocking dependencies.
+## Format
+
+- `-` needed work
+- `*` in progress
+- nesting allowed: a `*` parent may have indented `-` subitems
+- completed items are deleted (not kept in the file)
+
+## Migration
+
+Legacy checkbox format on read: `- [ ]` to `-`, `- [~]` to `*`, `- [x]` deleted.
+
+## Steps
+
+1. Select the first top-level `-` item with no incomplete explicit dependency. If it has `*` subitems, pick the first `-` subitem under it instead.
+2. Mark it `*`, complete it, delete the line and its subitems. If blocked, leave it `*` and report the blocker.
+3. One item per invocation. Halt and await instructions.
+4. If nothing is unblocked, report that and the blocking dependencies.
