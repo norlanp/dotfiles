@@ -1,3 +1,4 @@
+fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
@@ -37,3 +38,7 @@ command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
 # bun completions
 [ -f ~/.bun/_bun ] && source ~/.bun/_bun
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+# <<< grok installer <<<

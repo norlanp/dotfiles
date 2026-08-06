@@ -1,0 +1,55 @@
+[cli]
+installer = "internal"
+
+[model.glm-5-2]
+model = "glm-5.2:cloud"
+base_url = "http://localhost:11434/v1"
+name = "GLM-5.2 (Ollama Cloud)"
+api_key = "ollama"
+api_backend = "chat_completions"
+context_window = 976000
+
+[model.large-vision]
+model = "syn:large:vision"
+base_url = "https://api.synthetic.new/openai/v1"
+name = "large-vision"
+env_key = "SYNTHETIC_API_KEY"
+api_backend = "chat_completions"
+
+[model.small-vision]
+model = "syn:small:vision"
+base_url = "https://api.synthetic.new/openai/v1"
+name = "large-vision"
+env_key = "SYNTHETIC_API_KEY"
+api_backend = "chat_completions"
+
+[model.large-text]
+model = "syn:large:text"
+base_url = "https://api.synthetic.new/openai/v1"
+name = "large-text"
+env_key = "SYNTHETIC_API_KEY"
+api_backend = "chat_completions"
+
+[marketplace]
+default_skills_installs_purged = true
+official_marketplace_auto_installed = true
+
+[[marketplace.sources]]
+name = "xAI Official"
+git = "https://github.com/xai-org/plugin-marketplace.git"
+
+[ui]
+max_thoughts_width = 120
+fork_secondary_model = "grok-4.5"
+yolo = false
+compact_mode = true
+theme = "tokyonight"
+permission_mode = "always-approve"
+page_flip_on_send = false
+
+[privacy]
+privacy_banner_acked = "2026-08-04T22:41:26Z"
+
+[models]
+default = "large-text"
+default_reasoning_effort = "medium"

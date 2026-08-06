@@ -1,5 +1,6 @@
 alias v=nvim
 alias oc=opencode
+alias gr=grok
 alias lah='ls -lah'
 alias laht='ls -lahR | less'
 alias datetu='date -u +%Y-%m-%dT%H:%M:%S%Z'
