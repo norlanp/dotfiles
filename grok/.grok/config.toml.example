@@ -9,24 +9,31 @@ api_key = "ollama"
 api_backend = "chat_completions"
 context_window = 976000
 
-[model.large-vision]
-model = "syn:large:vision"
+[model.small-text]
+model = "syn:small:text"
 base_url = "https://api.synthetic.new/openai/v1"
-name = "large-vision"
-env_key = "SYNTHETIC_API_KEY"
-api_backend = "chat_completions"
-
-[model.small-vision]
-model = "syn:small:vision"
-base_url = "https://api.synthetic.new/openai/v1"
-name = "large-vision"
+name = "small text"
 env_key = "SYNTHETIC_API_KEY"
 api_backend = "chat_completions"
 
 [model.large-text]
 model = "syn:large:text"
 base_url = "https://api.synthetic.new/openai/v1"
-name = "large-text"
+name = "large text"
+env_key = "SYNTHETIC_API_KEY"
+api_backend = "chat_completions"
+
+[model.large-image]
+model = "syn:large:image"
+base_url = "https://api.synthetic.new/openai/v1"
+name = "large image"
+env_key = "SYNTHETIC_API_KEY"
+api_backend = "chat_completions"
+
+[model.small-image]
+model = "syn:small:image"
+base_url = "https://api.synthetic.new/openai/v1"
+name = "small image"
 env_key = "SYNTHETIC_API_KEY"
 api_backend = "chat_completions"
 
@@ -43,7 +50,7 @@ max_thoughts_width = 120
 fork_secondary_model = "grok-4.5"
 yolo = false
 compact_mode = true
-theme = "tokyonight"
+theme = "rosepine"
 permission_mode = "always-approve"
 page_flip_on_send = false
 
@@ -51,5 +58,5 @@ page_flip_on_send = false
 privacy_banner_acked = "2026-08-04T22:41:26Z"
 
 [models]
-default = "large-text"
+default = "glm-5-2"
 default_reasoning_effort = "medium"
