@@ -38,9 +38,11 @@ stow */
 `.agents/` is a tool-agnostic source of truth for `AGENTS.md`, `commands/`, and `skills/`.
 It is a dotdir so `stow */` skips it automatically. Each tool's package symlinks into it:
 
-- `opencode/.config/opencode/{AGENTS.md,command,skills}` -> `.agents/`
+- `opencode/.config/opencode/{AGENTS.md,command,skills,agents}` -> `.agents/`
 - `claude/.claude/{CLAUDE.md,commands,skills}` -> `.agents/`
-- `grok/.grok/{AGENTS.md,commands,skills}` -> `.agents/`
+- `grok/.grok/{AGENTS.md,commands,skills,agents}` -> `.agents/`
+
+Agent definitions use a superset frontmatter: opencode fields (`mode`, `temperature`, `permission`) and grok fields (`name`, `prompt_mode`, `model`, `permission_mode`, `agents_md`) coexist — each tool reads its own and ignores the rest.
 
 Edit shared content in `.agents/` and all three tools pick it up.
 

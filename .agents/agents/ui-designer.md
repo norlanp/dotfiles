@@ -1,10 +1,15 @@
 ---
+name: ui-designer
 description: UI designer creating scalable design systems and pixel-perfect component libraries
 mode: subagent
 temperature: 0.3
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # UI Designer

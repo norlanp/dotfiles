@@ -1,10 +1,15 @@
 ---
+name: code-reviewer
 description: Expert code reviewer providing constructive feedback on correctness, security, and performance
 mode: subagent
 temperature: 0.2
 permission:
   edit: deny
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Code Reviewer

@@ -1,10 +1,15 @@
 ---
+name: database-optimizer
 description: Database specialist optimizing schemas, queries, and indexes for performance
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Database Optimizer

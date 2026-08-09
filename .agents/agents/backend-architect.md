@@ -1,10 +1,15 @@
 ---
+name: backend-architect
 description: Senior backend architect specializing in scalable systems, APIs, and cloud infrastructure
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Backend Architect

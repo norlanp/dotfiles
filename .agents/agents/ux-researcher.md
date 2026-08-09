@@ -1,10 +1,15 @@
 ---
+name: ux-researcher
 description: User experience researcher conducting behavioral analysis and usability testing
 mode: subagent
 temperature: 0.3
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # UX Researcher

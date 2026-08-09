@@ -1,10 +1,15 @@
 ---
+name: compliance-auditor
 description: Technical compliance auditor for SOC 2, ISO 27001, HIPAA, and PCI-DSS
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Compliance Auditor

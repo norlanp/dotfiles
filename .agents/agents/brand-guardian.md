@@ -1,10 +1,15 @@
 ---
+name: brand-guardian
 description: Brand strategist creating cohesive identities and ensuring consistent expression
 mode: subagent
 temperature: 0.3
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Brand Guardian

@@ -1,10 +1,15 @@
 ---
+name: content-creator
 description: Content strategist and creator for multi-platform campaigns and brand storytelling
 mode: subagent
 temperature: 0.4
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Content Creator

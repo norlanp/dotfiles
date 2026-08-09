@@ -1,10 +1,15 @@
 ---
+name: frontend-developer
 description: Expert frontend developer specializing in React/Vue/Angular, performance optimization, and accessibility
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Frontend Developer

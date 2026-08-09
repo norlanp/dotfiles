@@ -1,10 +1,15 @@
 ---
+name: product-manager
 description: Product leader owning full lifecycle from discovery through GTM and outcome measurement
 mode: subagent
 temperature: 0.3
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Product Manager

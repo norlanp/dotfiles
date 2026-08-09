@@ -1,10 +1,15 @@
 ---
+name: ai-engineer
 description: AI/ML engineer building and deploying models with bias testing and safety guardrails
 mode: subagent
 temperature: 0.3
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # AI Engineer

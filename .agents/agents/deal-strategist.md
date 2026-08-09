@@ -1,10 +1,15 @@
 ---
+name: deal-strategist
 description: Senior deal strategist using MEDDPICC for complex B2B sales qualification and win planning
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Deal Strategist

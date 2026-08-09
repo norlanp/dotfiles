@@ -1,10 +1,15 @@
 ---
+name: outbound-strategist
 description: Signal-based outbound specialist designing multi-channel prospecting sequences
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: deny
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Outbound Strategist

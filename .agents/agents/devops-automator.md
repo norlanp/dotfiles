@@ -1,10 +1,15 @@
 ---
+name: devops-automator
 description: DevOps engineer automating infrastructure, CI/CD pipelines, and cloud operations
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # DevOps Automator

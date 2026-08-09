@@ -1,10 +1,15 @@
 ---
+name: developer-advocate
 description: Developer advocate bridging product and developer communities through authentic engagement
 mode: subagent
 temperature: 0.4
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Developer Advocate

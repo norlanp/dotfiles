@@ -1,10 +1,15 @@
 ---
+name: security-specialist
 description: OWASP-aware security specialist for vulnerability assessment, threat modeling, and secure architecture
 mode: subagent
 temperature: 0.1
 permission:
   edit: deny
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Security Specialist

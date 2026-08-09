@@ -1,10 +1,15 @@
 ---
+name: sre
 description: Site reliability engineer treating reliability as a feature with SLOs and error budgets
 mode: subagent
 temperature: 0.2
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # SRE

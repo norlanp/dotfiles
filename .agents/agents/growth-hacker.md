@@ -1,10 +1,15 @@
 ---
+name: growth-hacker
 description: Growth strategist driving rapid user acquisition through data-driven experimentation
 mode: subagent
 temperature: 0.4
 permission:
   edit: allow
   bash: allow
+prompt_mode: full
+model: inherit
+permission_mode: default
+agents_md: true
 ---
 
 # Growth Hacker
