@@ -7,6 +7,18 @@ base_url = "http://localhost:11434/v1"
 name = "GLM-5.2 (Ollama Cloud)"
 api_key = "ollama"
 api_backend = "chat_completions"
+default_reasoning_effort = "high"
+reasoning_effort = "high"
+context_window = 976000
+
+[model.deepseek-flash]
+model = "deepseek-v4-flash:cloud"
+base_url = "http://localhost:11434/v1"
+name = "deep seek flash"
+api_key = "ollama"
+api_backend = "chat_completions"
+default_reasoning_effort = "high"
+reasoning_effort = "high"
 context_window = 976000
 
 [model.small-text]
@@ -21,6 +33,8 @@ model = "syn:large:text"
 base_url = "https://api.synthetic.new/openai/v1"
 name = "large text"
 env_key = "SYNTHETIC_API_KEY"
+default_reasoning_effort = "high"
+reasoning_effort = "high"
 api_backend = "chat_completions"
 
 [model.large-vision]
@@ -58,5 +72,5 @@ page_flip_on_send = false
 privacy_banner_acked = "2026-08-04T22:41:26Z"
 
 [models]
-default = "glm-5-2"
+default = "large-text"
 default_reasoning_effort = "medium"
