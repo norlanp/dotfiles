@@ -1,0 +1,1 @@
+../skills/cmt/SKILL.md
