@@ -24,6 +24,11 @@
     },
     "list": {
       "~/.ssh/**": "deny"
+    },
+    "bash": {
+      "*~/.ssh*": "deny",
+      "*$HOME/.ssh*": "deny",
+      "ssh *": "ask"
     }
   },
   "mcp": {

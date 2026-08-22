@@ -1,5 +1,6 @@
 alias v=nvim
 alias oc=opencode
+alias ocs='sandbox-exec -f ~/.config/opencode/opencode.sb opencode'
 alias gr=grok
 alias lah='ls -lah'
 alias laht='ls -lahR | less'

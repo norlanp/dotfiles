@@ -1,0 +1,25 @@
+;;
+;; opencode sandbox profile
+;; Blocks access to sensitive credential dirs and keychain IPC.
+;; Permissive elsewhere; opencode remains fully functional.
+;;
+(version 1)
+(allow default)
+
+(deny file*
+       (regex #"^/Users/[^/]+/\.ssh(/|$)"))
+(deny file*
+       (regex #"^/Users/[^/]+/\.aws(/|$)"))
+(deny file*
+       (regex #"^/Users/[^/]+/\.gnupg(/|$)"))
+(deny file*
+       (regex #"^/Users/[^/]+/\.kube(/|$)"))
+(deny file*
+       (regex #"^/Users/[^/]+/\.config/opencode/secrets(/|$)"))
+
+(deny mach-lookup
+       (global-name "com.apple.securityd"))
+(deny mach-lookup
+       (global-name "com.apple.SecurityServer"))
+(deny mach-lookup
+       (global-name "com.apple.SecurityServer.2"))
