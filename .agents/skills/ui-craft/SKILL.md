@@ -18,8 +18,8 @@ If user already has a confirmed brief, skip to Step 2.
 ### Step 2: Load References
 
 Based on brief's recommended references, consult:
-- Always: layout/spacing, typography
-- As needed: interaction-design for forms, motion-design for animation, color-and-contrast for theming, responsive-design for multi-device, ux-writing for copy-heavy
+- Always: `/ui-layout`, `/ui-typeset`
+- As needed: `/ui-harden` for forms, `/ui-animate` for animation, `/ui-colorize` for theming, `/ui-adapt` for multi-device, `/ui-clarify` for copy-heavy
 
 ### Step 3: Build
 
