@@ -19,7 +19,7 @@ Banned (AI monoculture): Inter, Roboto, Arial, Open Sans, system defaults, Fraun
 
 Procedure:
 1. Write 3 concrete brand-voice words (not "modern" or "elegant")
-2. List 3 fonts you'd normally reach for — reject them
+2. List 3 fonts you'd normally reach for - reject them
 3. Browse Google Fonts, Pangram Pangram, Future Fonts, Adobe Fonts, ABC Dinamo, Klim, Velvetyne
 4. Look for something that fits as a physical object (museum caption, shop sign, terminal manual, fabric label)
 5. Cross-check: right font for "elegant" ≠ necessarily serif. "technical" ≠ necessarily sans-serif
@@ -28,7 +28,7 @@ Procedure:
 
 - **5 sizes cover most needs**: caption, secondary, body, subheading, heading
 - **Consistent ratio** between levels (1.25, 1.333, or 1.5)
-- **Combine dimensions**: size + weight + color + space — don't rely on size alone
+- **Combine dimensions**: size + weight + color + space - don't rely on size alone
 - **App UIs**: fixed `rem`-based scale, optionally at 1-2 breakpoints
 - **Marketing/content**: fluid `clamp(min, preferred, max)` for headings, fixed body text
 

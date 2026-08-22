@@ -39,7 +39,7 @@ description: Amplify boring designs. More visual impact and personality
 ### Visual Effects
 - Dramatic shadows for elevation (not generic drop shadows on rounded rects)
 - Background: mesh patterns, noise, geometric patterns
-- Texture: grain, halftone, duotone, layered — NOT glassmorphism
+- Texture: grain, halftone, duotone, layered - NOT glassmorphism
 - Thick borders, decorative frames, custom shapes
 - Custom illustrations, decorative brand details
 
@@ -57,7 +57,7 @@ description: Amplify boring designs. More visual impact and personality
 
 ## AI Slop Warning
 
-When making things "bolder," AI defaults to cyan/purple gradients, glassmorphism, neon dark glows, gradient text. These are the OPPOSITE of bold — they're generic. Bold means distinctive, not "more effects."
+When making things "bolder," AI defaults to cyan/purple gradients, glassmorphism, neon dark glows, gradient text. These are the OPPOSITE of bold - they're generic. Bold means distinctive, not "more effects."
 
 **The test**: If you said "AI made this bolder," would they believe you? If yes, start over.
 

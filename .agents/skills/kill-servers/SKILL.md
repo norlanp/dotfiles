@@ -5,7 +5,7 @@ description: Kill dev servers started from CWD
 
 # Kill Servers
 
-`/kill-servers` — Kill dev servers started from CWD.
+`/kill-servers` - Kill dev servers started from CWD.
 
 ## Flow
 

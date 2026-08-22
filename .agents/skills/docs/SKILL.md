@@ -17,9 +17,9 @@ Default: `quick docs/`. If arg 1 is not `quick` or `full`, treat it as `scope`.
 - `docs/requirements.md`: durable product requirements
 - `docs/code-map.md`: repo map and entry points
 - `docs/adr/`: decisions
-- `docs/runbooks/`: operations (conditional — only for projects with deployment/ops)
+- `docs/runbooks/`: operations (conditional - only for projects with deployment/ops)
 
-Aliases (auto-detect, propose consolidation — never rename without per-file approval): `terminology.md`/`domain.md` → `glossary.md`, `spec.md` → `requirements.md`, `decisions/` → `adr/`, `architecture-notes.md`/`system.md` → `architecture.md`, `feature-log.md` → `features.md`, `ops/` → `runbooks/`.
+Aliases (auto-detect, propose consolidation - never rename without per-file approval): `terminology.md`/`domain.md` → `glossary.md`, `spec.md` → `requirements.md`, `decisions/` → `adr/`, `architecture-notes.md`/`system.md` → `architecture.md`, `feature-log.md` → `features.md`, `ops/` → `runbooks/`.
 
 Preserve historical docs: `prds/`, `audits/`, `hotfixes/`, release notes, ADRs. Never delete without explicit approval.
 
@@ -54,10 +54,10 @@ Use sub-agents only for `/docs full`: inventory, cross-reference validation, con
 ## Reconciliation Flow
 
 When structure doesn't match canonical:
-1. **Consolidate** — merge durable facts from non-canonical docs into the matching canonical doc. Preserve source records as historical or delete with explicit per-file approval.
-2. **Canonicalize** — propose creating missing canonical docs only when evidence exists. Propose renaming alias files to canonical names with per-file approval.
-3. **Sync** — update `AGENTS.md` to reference current canonical docs; remove stale refs to renamed/deleted docs; add refs for newly created canonical docs.
-4. **Prune** — propose removal of orphan/extra files only with explicit approval. Never auto-delete.
+1. **Consolidate** - merge durable facts from non-canonical docs into the matching canonical doc. Preserve source records as historical or delete with explicit per-file approval.
+2. **Canonicalize** - propose creating missing canonical docs only when evidence exists. Propose renaming alias files to canonical names with per-file approval.
+3. **Sync** - update `AGENTS.md` to reference current canonical docs; remove stale refs to renamed/deleted docs; add refs for newly created canonical docs.
+4. **Prune** - propose removal of orphan/extra files only with explicit approval. Never auto-delete.
 
 ## Fix Rules
 

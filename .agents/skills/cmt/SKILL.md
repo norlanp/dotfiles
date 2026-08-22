@@ -7,13 +7,13 @@ description: >
 
 # Cmt
 
-`/cmt` — Commit logical changes as focused commits. No pushing.
+`/cmt` - Commit logical changes as focused commits. No pushing.
 
 ## Rules
 
 - One logical concern per commit. Split unrelated changes into separate commits.
 - Skip generated, ephemeral, or untracked-by-design files.
-- Message: `type: description` — type is feat, fix, docs, refactor, test, chore, style, perf.
+- Message: `type: description` - type is feat, fix, docs, refactor, test, chore, style, perf.
 - Description: imperative mood, lowercase first word, no trailing period, max ~72 chars.
 - No AI/agent mentions, no Co-authored-by trailers.
 - No pushing. No amending published commits.

@@ -66,7 +66,7 @@ description: Technical UI quality checks: accessibility, performance, theming, r
 [Pass/fail with specific tells]
 
 ## Findings (by severity)
-- [P?] Issue — location — impact — fix — suggested command
+- [P?] Issue - location - impact - fix - suggested command
 
 ## Patterns & Systemic Issues
 [Recurring problems across codebase]
@@ -75,5 +75,5 @@ description: Technical UI quality checks: accessibility, performance, theming, r
 [What works well]
 
 ## Recommended Actions
-1. [P?] `/command` — description
+1. [P?] `/command` - description
 ```

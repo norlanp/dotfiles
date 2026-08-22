@@ -33,7 +33,7 @@ description: Improve layout, spacing, and visual rhythm
 - **Grid for 2D**: page structure, dashboards, rows + columns need coordinated control
 - Don't default to Grid when Flexbox + flex-wrap is simpler
 - `repeat(auto-fit, minmax(280px, 1fr))` for responsive grids without breakpoints
-- Named grid areas for complex page layouts — redefine at breakpoints
+- Named grid areas for complex page layouts - redefine at breakpoints
 
 ## Break Card Monotony
 
@@ -65,4 +65,4 @@ description: Improve layout, spacing, and visual rhythm
 - Center everything (left-aligned + asymmetry feels more designed)
 - Default to hero metric layout (big number + gradient)
 - CSS Grid when Flexbox would be simpler
-- Arbitrary z-index values (999, 9999) — build semantic scale
+- Arbitrary z-index values (999, 9999) - build semantic scale

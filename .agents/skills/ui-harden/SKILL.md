@@ -39,8 +39,8 @@ description: Make interfaces production-ready: error handling, empty states, i18
 - Graceful degradation: core works without JS
 
 ### Edge Cases
-- Empty: no items, no results, no notifications — with clear next action
-- Loading: initial, pagination, refresh — with context ("Loading your projects...")
+- Empty: no items, no results, no notifications - with clear next action
+- Loading: initial, pagination, refresh - with context ("Loading your projects...")
 - Large datasets: pagination or virtual scrolling, search/filter
 - Concurrent operations: prevent double-submit, optimistic updates with rollback
 - Permission states: explain why, how to get access

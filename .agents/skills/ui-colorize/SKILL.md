@@ -35,7 +35,7 @@ description: Add strategic color to monochromatic or dull designs
 - Focus rings matching brand
 
 ### OKLCH for Color
-Perceptually uniform — equal steps in lightness look equal. Great for harmonious scales.
+Perceptually uniform - equal steps in lightness look equal. Great for harmonious scales.
 
 ### Rules
 - **60-30-10**: dominant color 60%, secondary 30%, accent 10%

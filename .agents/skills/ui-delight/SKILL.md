@@ -24,9 +24,9 @@ description: Add moments of joy, personality, and unexpected polish
 - Progress celebrations at 100%
 
 ### Personality in Copy
-- Playful error messages (match brand — banks can be warm, not wacky)
+- Playful error messages (match brand - banks can be warm, not wacky)
 - Encouraging empty states ("Your canvas awaits.")
-- Avoid AI slop copy: "Herding pixels", "Teaching robots to dance" — these scream machine-generated. Write product-specific messages.
+- Avoid AI slop copy: "Herding pixels", "Teaching robots to dance" - these scream machine-generated. Write product-specific messages.
 
 ### Visual Personality
 - Custom illustrations for empty/error/loading states
@@ -53,7 +53,7 @@ description: Add moments of joy, personality, and unexpected polish
 ### Sound (when appropriate)
 - Subtle cues: notification, success ding
 - Respect system settings, provide mute option
-- Keep volumes quiet — subtle cues, not alarms
+- Keep volumes quiet - subtle cues, not alarms
 
 ## NEVER
 

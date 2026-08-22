@@ -14,10 +14,10 @@ description: Final quality pass before shipping. Fix alignment, spacing, consist
 
 ## Flow
 
-1. **Design System Discovery** — find tokens, components, conventions. Identify drift from system.
-2. **Pre-Polish Assessment** — review completeness, known issues, quality bar, timeline.
+1. **Design System Discovery** - find tokens, components, conventions. Identify drift from system.
+2. **Pre-Polish Assessment** - review completeness, known issues, quality bar, timeline.
 3. **Polish systematically** through each dimension below.
-4. **Final verification** — use it yourself, test on real devices, check all states.
+4. **Final verification** - use it yourself, test on real devices, check all states.
 
 ## Polish Dimensions
 

@@ -38,7 +38,7 @@ description: Strip design to essence. Remove unnecessary complexity
 - Reduce to 1-2 colors + neutrals
 - One font family, 3-4 sizes, 2-3 weights
 - Remove decorative borders, shadows, backgrounds
-- Flatten structure — never nest cards inside cards
+- Flatten structure - never nest cards inside cards
 - Remove unnecessary cards (spacing creates grouping naturally)
 - One consistent spacing scale
 
