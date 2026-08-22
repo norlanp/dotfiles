@@ -9,9 +9,9 @@ description: UX design review: hierarchy, clarity, emotional resonance, cognitiv
 
 ## Flow
 
-1. **Read source** — HTML, CSS, JS/TS for target area
-2. **LLM Design Review** — evaluate visually and structurally (if browser available, inspect live page)
-3. **Automated Detection** — run `npx impeccable --json [target]` for deterministic anti-pattern scan
+1. **Read source** - HTML, CSS, JS/TS for target area
+2. **LLM Design Review** - evaluate visually and structurally (if browser available, inspect live page)
+3. **Automated Detection** - run `npx impeccable --json [target]` for deterministic anti-pattern scan
 4. **Synthesize** into combined report
 
 ## LLM Design Review Dimensions
@@ -62,7 +62,6 @@ Auto-select 2-3 personas for the interface type. For each, walk through primary 
 - **Sam (Screen Reader)**: semantic HTML, ARIA, focus management
 - **Morgan (Mobile)**: touch targets, responsive, connectivity
 
-When `## Design Context` exists in `.impeccable.md`, generate 1-2 project-specific personas from audience/brand info.
 
 ## Report Format
 
@@ -81,7 +80,7 @@ LLM assessment + automated scan results
 - [2-3 specific things done well]
 
 ## Priority Issues
-- [P?] What — Why it matters — Fix — Suggested command
+- [P?] What - Why it matters - Fix - Suggested command
 
 ## Persona Red Flags
 - **Alex**: [specific breaks]
