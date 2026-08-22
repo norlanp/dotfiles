@@ -5,7 +5,7 @@ description: Full-project code audit workflow: audit then fix
 
 # Audit
 
-`/audit [scope] [guidance]` — Full-project code audit (audit first, then fix).
+`/audit [scope] [guidance]` - Full-project code audit (audit first, then fix).
 
 - `scope` (optional): module/path. Defaults to full project sweep.
 - `guidance` (optional): free-form sentence to steer audit focus.
@@ -33,7 +33,7 @@ CRITICAL - must fix now | MEDIUM - should fix soon | LOW - suggestion (max 5)
 
 ## Flow
 
-1. **Audit** — Spawn ONE reviewer via Task tool covering all focus areas. Returns findings: severity, file:line, one-line evidence, one-line impact. Drop findings without specific code evidence. CRITICAL/MEDIUM = verifiable defect; LOW = suggestion.
-2. **Report** — Consolidate, de-duplicate, cap LOW at 5. No findings → `APPROVED`. Else write findings to `todo.md` as `[ ] {severity} {issue} @file:line` items (CRITICAL first), then ask: `Proceed to fix now? (recommended: yes) [Y/n]`.
-3. **Fix** — Work through `todo.md` items by priority (CRITICAL → MEDIUM → LOW). Mark `[x]` as each completes. Each: root cause → minimal targeted fix → verify. Parallel for independent, serial for dependent.
-4. **Re-audit** — Only if CRITICAL/MEDIUM were fixed. Re-run reviewer on modified areas. If findings remain, loop (max 3 rounds). Still blocked → `CHANGES_NEEDED`.
+1. **Audit** - Spawn ONE reviewer via Task tool covering all focus areas. Returns findings: severity, file:line, one-line evidence, one-line impact. Drop findings without specific code evidence. CRITICAL/MEDIUM = verifiable defect; LOW = suggestion.
+2. **Report** - Consolidate, de-duplicate, cap LOW at 5. No findings → `APPROVED`. Else write findings to `todo.txt` as `- {severity} {issue} @file:line` items (CRITICAL first), then ask: `Proceed to fix now? (recommended: yes) [Y/n]`.
+3. **Fix** - Work through `todo.txt` items by priority (CRITICAL → MEDIUM → LOW). Delete item as each completes. Each: root cause → minimal targeted fix → verify. Parallel for independent, serial for dependent.
+4. **Re-audit** - Only if CRITICAL/MEDIUM were fixed. Re-run reviewer on modified areas. If findings remain, loop (max 3 rounds). Still blocked → `CHANGES_NEEDED`.
