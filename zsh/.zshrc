@@ -38,7 +38,3 @@ command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
 # bun completions
 [ -f ~/.bun/_bun ] && source ~/.bun/_bun
-
-# >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-# <<< grok installer <<<
