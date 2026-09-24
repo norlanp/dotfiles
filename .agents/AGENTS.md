@@ -1,6 +1,6 @@
 ## Communication
 
-Be brief.
+Be brief and concise. Answer directly with no preamble or postamble.
 
 ## Coding guidelines
 
