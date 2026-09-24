@@ -22,7 +22,8 @@ description: >
 ## Steps
 
 1. `git status --short` and `git diff` to review all changes.
-2. Group changes by concern. If one concern, single commit.
-3. For each group: `git add` only those files, then `git commit`.
-4. Report one line per commit: `hash message`.
-5. If nothing to commit, say so and stop.
+2. Check for untracked files that should be gitignored (build artifacts, deps, secrets, caches, editor/OS files, `./tmp/`, `./var/`). If any match existing `.gitignore` patterns, they'll already be ignored - look for ones that aren't. If found, ask the user whether to add them to `.gitignore` before committing.
+3. Group changes by concern. If one concern, single commit.
+4. For each group: `git add` only those files, then `git commit`.
+5. Report one line per commit: `hash message`.
+6. If nothing to commit, say so and stop.
