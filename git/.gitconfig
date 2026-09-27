@@ -22,6 +22,7 @@
 
 [core]
     pager = delta
+    excludesFile = ~/.gitignore
 
 [interactive]
     diffFilter = delta --color-only
@@ -54,3 +55,5 @@
 	autoSetupRemote = true
 [branch]
 	autoSetupMerge = simple
+[url "git@github.com:"]
+	insteadOf = https://github.com/
