@@ -38,3 +38,6 @@ command -v mise &>/dev/null && eval "$(mise activate zsh)"
 
 # bun completions
 [ -f ~/.bun/_bun ] && source ~/.bun/_bun
+
+export GH_PRIVATE_ENABLE_TELEMETRY=0
+export GH_TELEMETRY=false
