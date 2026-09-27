@@ -1,0 +1,1 @@
+../skills/jellyfin-optimize/SKILL.md
