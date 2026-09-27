@@ -1,5 +1,8 @@
 **/.DS_Store
 .DS_Store
+scripts/.local/bin/
+scripts/.local/share/
+scripts/.local/state/
 
 todo.txt
 
@@ -18,6 +21,9 @@ secrets.json
 
 # Generated files
 opencode/.config/opencode/package-lock.json
+
+# Machine-local config
+opencode/.config/opencode/.claude/settings.local.json
 
 # .agents/ is a shared source tree (dotdir), skipped by stow */
 # (no ignore rules needed; kept for documentation)
