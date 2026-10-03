@@ -1,6 +1,6 @@
 ---
 name: ui-critique
-description: UX design review: hierarchy, clarity, emotional resonance, cognitive load
+description: "UX design review: hierarchy, clarity, emotional resonance, cognitive load"
 ---
 
 # UI Critique

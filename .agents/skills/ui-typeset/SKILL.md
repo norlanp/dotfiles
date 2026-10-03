@@ -1,6 +1,6 @@
 ---
 name: ui-typeset
-description: Fix typography: font choices, hierarchy, sizing, weight, readability
+description: "Fix typography: font choices, hierarchy, sizing, weight, readability"
 ---
 
 # UI Typeset

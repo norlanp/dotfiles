@@ -1,6 +1,6 @@
 ---
 name: ui-audit
-description: Technical UI quality checks: accessibility, performance, theming, responsive, anti-patterns
+description: "Technical UI quality checks: accessibility, performance, theming, responsive, anti-patterns"
 ---
 
 # UI Audit

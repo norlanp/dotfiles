@@ -1,6 +1,6 @@
 ---
 name: ui-harden
-description: Make interfaces production-ready: error handling, empty states, i18n, edge cases
+description: "Make interfaces production-ready: error handling, empty states, i18n, edge cases"
 ---
 
 # UI Harden

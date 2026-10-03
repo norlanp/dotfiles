@@ -1,6 +1,6 @@
 ---
 name: ui-animate
-description: Add purposeful motion: micro-interactions, transitions, choreography
+description: "Add purposeful motion: micro-interactions, transitions, choreography"
 ---
 
 # UI Animate

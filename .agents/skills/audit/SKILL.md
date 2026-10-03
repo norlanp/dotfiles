@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Full-project code audit workflow: audit then fix
+description: "Full-project code audit workflow: audit then fix"
 ---
 
 # Audit

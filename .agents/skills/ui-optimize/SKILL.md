@@ -1,6 +1,6 @@
 ---
 name: ui-optimize
-description: Diagnose and fix UI performance: loading, rendering, animations
+description: "Diagnose and fix UI performance: loading, rendering, animations"
 ---
 
 # UI Optimize
