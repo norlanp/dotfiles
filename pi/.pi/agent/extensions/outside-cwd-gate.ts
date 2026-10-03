@@ -187,16 +187,17 @@ function pathOutside(p: string, cwd: string): FlaggedPath[] {
 }
 
 /**
- * Session allowlist root for a requested path: the directory the caller named, with symlinks
- * resolved only on that directory. Using the requested directory keeps symlinked siblings in the
- * same folder covered, unlike resolving the file first.
+ * Session allowlist root for a requested path: existing directories are allowed directly, existing
+ * files allow their containing directory, and not-yet-created paths allow the path itself. Symlinks
+ * are resolved only on the chosen directory, which keeps symlinked siblings in the same folder
+ * covered rather than resolving the file to a different tree.
  */
 function allowRootFor(requested: string): string {
-	let dir = dirname(requested);
+	let dir = requested;
 	try {
-		if (statSync(requested).isDirectory()) dir = requested;
+		if (!statSync(requested).isDirectory()) dir = dirname(requested);
 	} catch {
-		// Not created yet; fall back to its parent directory.
+		// Not created yet; keep the requested path as the root.
 	}
 	return canonicalize(dir);
 }
@@ -272,7 +273,7 @@ export default function (pi: ExtensionAPI) {
 		detail: string,
 		paths: FlaggedPath[],
 	): Promise<{ block: boolean; reason: string } | undefined> {
-		const toAsk = paths.filter((f) => !isSessionAllowed(f.target) && !isSessionAllowed(f.requested));
+		const toAsk = paths.filter((f) => !isSessionAllowed(f.target));
 		if (toAsk.length === 0) return undefined;
 
 		if (!ctx.hasUI) {
