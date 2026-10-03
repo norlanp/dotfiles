@@ -30,7 +30,7 @@ brew bundle
 stow */
 
 # or stow explicitly to exclude agents/:
-# stow alacritty aliases claude git grok ideavim librewolf linearmouse nvim opencode ripgrep scripts starship tmux zsh
+# stow alacritty aliases git ideavim librewolf linearmouse nvim opencode pi ripgrep scripts starship tmux zsh
 ```
 
 ## Shared agents tree
@@ -39,12 +39,11 @@ stow */
 It is a dotdir so `stow */` skips it automatically. Each tool's package symlinks into it:
 
 - `opencode/.config/opencode/{AGENTS.md,command,skills,agents}` -> `.agents/`
-- `claude/.claude/{CLAUDE.md,commands,skills}` -> `.agents/`
-- `grok/.grok/{AGENTS.md,commands,skills,agents}` -> `.agents/`
+- `pi/.pi/agent/{AGENTS.md,prompts,skills}` -> `.agents/`
 
-Agent definitions use a superset frontmatter: opencode fields (`mode`, `temperature`, `permission`) and grok fields (`name`, `prompt_mode`, `model`, `permission_mode`, `agents_md`) coexist — each tool reads its own and ignores the rest.
+Agent definitions in `.agents/agents/` use a superset frontmatter; opencode reads its `mode`, `temperature`, and `permission` fields and ignores the rest.
 
-Edit shared content in `.agents/` and all three tools pick it up.
+Edit shared content in `.agents/` and both tools pick it up.
 
 ```
 # cleanup neovim install if necessary
