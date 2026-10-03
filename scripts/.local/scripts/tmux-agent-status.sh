@@ -3,9 +3,9 @@
 # renames windows with status indicators.
 # ● = working, ○ = idle
 
-AGENTS="claude|aider|codex|opencode|grok|gemini"
+AGENTS="pi|claude|aider|codex|opencode|grok|gemini"
 # Patterns visible in pane output when agent is actively generating
-WORKING_PATTERN="esc (to )?interrupt|Generating\.\.\.|Thinking\.\.\.|streaming"
+WORKING_PATTERN="esc (to )?interrupt|Generating\.\.\.|Thinking\.\.\.|streaming|Working"
 POLL_INTERVAL=5
 
 # Prevent duplicate instances
