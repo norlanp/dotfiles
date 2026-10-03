@@ -33,6 +33,7 @@ const CONFIG = {
 
 const DEV_RE = /^\/dev\/(null|stdout|stderr|tty|fd\/\d+)$/;
 const URL_RE = /:\/\//;
+const PROTOCOL_RELATIVE_RE = /^\/\/[^/\s]+\.[^/\s]+/;
 const ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
 
 // ---------------------------------------------------------------------------
@@ -82,6 +83,17 @@ function isExecutableFile(target: string): boolean {
 	}
 }
 
+/** Whether the path itself or any ancestor (short of the filesystem root) exists. */
+function existsSelfOrAncestor(p: string): boolean {
+	let cur = p;
+	while (true) {
+		if (existsSync(cur)) return true;
+		const parent = dirname(cur);
+		if (parent === cur || parent === "/") return false;
+		cur = parent;
+	}
+}
+
 function expandToken(tok: string): string {
 	if (tok === "~") return homedir();
 	if (tok.startsWith("~/")) return join(homedir(), tok.slice(2));
@@ -91,11 +103,136 @@ function expandToken(tok: string): string {
 	return tok;
 }
 
-function stripQuotes(tok: string): string {
-	if (tok.length >= 2 && ((tok.startsWith('"') && tok.endsWith('"')) || (tok.startsWith("'") && tok.endsWith("'")))) {
-		return tok.slice(1, -1);
+/** A shell word (quotes removed) or an operator such as `>` or `|`. */
+interface Token {
+	value: string;
+	operator?: string;
+}
+
+/**
+ * Split a command into shell-like words and operators, honoring single/double quotes, backslash
+ * escapes, and `#` comments. Quoted text stays one word so a path inside a quoted string is not
+ * chopped into fragments that look absolute.
+ */
+function tokenizeShell(command: string): Token[] {
+	const tokens: Token[] = [];
+	let value = "";
+	let hasValue = false;
+	const flush = () => {
+		if (hasValue) tokens.push({ value });
+		value = "";
+		hasValue = false;
+	};
+
+	let i = 0;
+	while (i < command.length) {
+		const ch = command[i];
+
+		if (ch === "'" || ch === '"') {
+			hasValue = true;
+			const quote = ch;
+			i++;
+			while (i < command.length && command[i] !== quote) {
+				if (quote === '"' && command[i] === "\\" && i + 1 < command.length) i++;
+				value += command[i];
+				i++;
+			}
+			i++; // closing quote, or end of input
+			continue;
+		}
+
+		if (ch === "\\" && i + 1 < command.length) {
+			value += command[i + 1];
+			hasValue = true;
+			i += 2;
+			continue;
+		}
+
+		// `#` only starts a comment at the start of an unquoted word.
+		if (ch === "#" && !hasValue) {
+			while (i < command.length && command[i] !== "\n") i++;
+			continue;
+		}
+
+		if (ch === " " || ch === "\t" || ch === "\r" || ch === "\n") {
+			flush();
+			i++;
+			continue;
+		}
+
+		if (";&|<>()".includes(ch)) {
+			flush();
+			let op = ch;
+			if (command[i + 1] === ch) {
+				op += ch;
+				i++;
+			}
+			tokens.push({ value: op, operator: op });
+			i++;
+			continue;
+		}
+
+		value += ch;
+		hasValue = true;
+		i++;
 	}
-	return tok;
+	flush();
+	return tokens;
+}
+
+/**
+ * Blank out heredoc bodies (`cat <<EOF ... EOF`) so their text is not scanned as arguments. The
+ * operator is found via the quote-aware tokenizer, so `<<` inside quotes is not mistaken for one.
+ */
+function stripHeredocs(command: string): string {
+	const out: string[] = [];
+	let pending: { delim: string; stripTabs: boolean } | undefined;
+	for (const line of command.split("\n")) {
+		if (pending !== undefined) {
+			const candidate = pending.stripTabs ? line.replace(/^\t+/, "") : line;
+			if (candidate === pending.delim) {
+				out.push(line);
+				pending = undefined;
+			} else {
+				out.push("");
+			}
+			continue;
+		}
+		out.push(line);
+		const found = findHeredoc(line);
+		if (found !== undefined) pending = found;
+	}
+	return out.join("\n");
+}
+
+/** Heredoc operator and delimiter opened on a line, if any. */
+function findHeredoc(line: string): { delim: string; stripTabs: boolean } | undefined {
+	const tokens = tokenizeShell(line);
+	for (let i = 0; i < tokens.length - 1; i++) {
+		if (tokens[i].operator !== "<<") continue;
+		const next = tokens[i + 1];
+		if (next.operator !== undefined) continue;
+		const stripTabs = next.value.startsWith("-");
+		const delim = stripTabs ? next.value.slice(1) : next.value;
+		if (delim) return { delim, stripTabs };
+	}
+	return undefined;
+}
+
+/**
+ * Sed/grep/awk expressions like `/^dependencies:/,/^dev_dependencies:/p` start with a slash but are
+ * not paths. A regex-only leading character or a slash-delimited address range is the tell.
+ */
+function looksLikePattern(tok: string): boolean {
+	if (!tok.startsWith("/")) return false;
+	if (tok.includes("$HOME") || tok.includes("${HOME}")) return false;
+	// Only characters that can open a valid regex; a glob such as `/*` stays a path candidate.
+	const second = tok[1];
+	if (second !== undefined && "^$[\\%".includes(second)) return true;
+	const range = /^\/([^/]+)\/,\/([^/]+)\/[a-zA-Z]*$/.exec(tok);
+	if (range === null) return false;
+	const metach = /[\^$.*\[\]\\]/;
+	return metach.test(range[1]) || metach.test(range[2]);
 }
 
 // ---------------------------------------------------------------------------
@@ -108,10 +245,10 @@ interface Candidate {
 }
 
 function extractCandidates(command: string): Candidate[] {
+	const tokens = tokenizeShell(stripHeredocs(command));
 	const out: Candidate[] = [];
 	const seen = new Set<string>();
-	const push = (raw: string, isRedirection: boolean) => {
-		const value = stripQuotes(raw);
+	const push = (value: string, isRedirection: boolean) => {
 		if (!value) return;
 		const key = `${isRedirection ? "R" : "T"}\u0000${value}`;
 		if (seen.has(key)) return;
@@ -119,25 +256,8 @@ function extractCandidates(command: string): Candidate[] {
 		out.push({ raw: value, isRedirection });
 	};
 
-	// Redirection targets are always treated as writes.
-	const redir = /(?:>>?|<<?)\s*("[^"]*"|'[^']*'|[^\s;&|<>()]+)/g;
-	let m: RegExpExecArray | null;
-	while ((m = redir.exec(command)) !== null) push(m[1], true);
-
-	// Best-effort token scan.
-	for (const token of command.split(/[\s;&|<>()]+/)) {
-		let tok = stripQuotes(token);
-		if (!tok || URL_RE.test(tok)) continue;
-
-		if (tok === "-") continue;
-		const eq = tok.indexOf("=");
-		if (eq > 0 && (tok.startsWith("-") || ASSIGN_RE.test(tok))) {
-			tok = tok.slice(eq + 1);
-			if (!tok) continue;
-		} else if (tok.startsWith("-")) {
-			continue;
-		}
-
+	/** Push a word when it references a path (absolute, home-relative, or containing a slash). */
+	const pushIfPath = (tok: string) => {
 		const isAbs = tok.startsWith("/");
 		const isHome =
 			tok === "~" ||
@@ -148,8 +268,43 @@ function extractCandidates(command: string): Candidate[] {
 			tok.startsWith("${HOME}/");
 		const isTraversal = /(^|\/)\.\.($|\/)/.test(tok);
 		const hasSlash = tok.includes("/");
+		if (!isAbs && !isHome && !isTraversal && !hasSlash) return;
+		if (looksLikePattern(tok)) return;
+		push(tok, false);
+	};
 
-		if (isAbs || isHome || isTraversal || hasSlash) push(tok, false);
+	for (let i = 0; i < tokens.length; i++) {
+		const token = tokens[i];
+
+		if (token.operator !== undefined) {
+			// The next word is a redirection target, except for heredoc delimiters and fd duplications.
+			if (token.operator === ">" || token.operator === ">>" || token.operator === "<") {
+				const next = tokens[i + 1];
+				if (next !== undefined && next.operator === undefined) {
+					push(next.value, true);
+					i++;
+				}
+			}
+			continue;
+		}
+
+		const tok = token.value;
+		if (!tok || URL_RE.test(tok)) continue;
+		if (tok === "-") continue;
+
+		// `KEY=value` is an assignment whose value is used via `$KEY`, not a path operand.
+		if (ASSIGN_RE.test(tok)) continue;
+		if (tok.startsWith("-")) {
+			// `--opt=value`: the value can still be a path operand.
+			const eq = tok.indexOf("=");
+			if (eq > 0) {
+				const value = tok.slice(eq + 1);
+				if (value && !value.includes(":") && !value.startsWith("-")) pushIfPath(value);
+			}
+			continue;
+		};
+
+		pushIfPath(tok);
 	}
 
 	return out;
@@ -168,6 +323,11 @@ function findOutsidePaths(command: string, cwd: string): FlaggedPath[] {
 	const flagged: FlaggedPath[] = [];
 	for (const { raw, isRedirection } of extractCandidates(command)) {
 		const requested = resolve(cwd, expandToken(raw));
+		// `//host.tld/...` is a protocol-relative URL unless that path or an ancestor exists.
+		// Redirection targets are always file writes, so they never get the URL escape.
+		if (!isRedirection && PROTOCOL_RELATIVE_RE.test(raw) && !existsSelfOrAncestor(requested)) {
+			continue;
+		}
 		const target = canonicalize(requested);
 		if (isInside(cwdReal, target)) continue;
 		if (isExempt(target)) continue;
