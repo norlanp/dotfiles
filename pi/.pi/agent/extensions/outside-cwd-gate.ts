@@ -155,27 +155,50 @@ function extractCandidates(command: string): Candidate[] {
 	return out;
 }
 
+interface FlaggedPath {
+	/** Canonical target used for gating. */
+	target: string;
+	/** Absolute path as requested, before symlink resolution. */
+	requested: string;
+}
+
 /** Return resolved outside-cwd paths referenced by a command (empty = allowed). */
-function findOutsidePaths(command: string, cwd: string): string[] {
+function findOutsidePaths(command: string, cwd: string): FlaggedPath[] {
 	const cwdReal = canonicalize(cwd);
-	const flagged: string[] = [];
+	const flagged: FlaggedPath[] = [];
 	for (const { raw, isRedirection } of extractCandidates(command)) {
-		const expanded = expandToken(raw);
-		const target = canonicalize(resolve(cwd, expanded));
+		const requested = resolve(cwd, expandToken(raw));
+		const target = canonicalize(requested);
 		if (isInside(cwdReal, target)) continue;
 		if (isExempt(target)) continue;
 		if (!isRedirection && CONFIG.exemptExecutables && isExecutableFile(target)) continue;
-		if (!flagged.includes(target)) flagged.push(target);
+		if (!flagged.some((f) => f.target === target)) flagged.push({ target, requested });
 	}
 	return flagged;
 }
 
 /** Return outside-cwd paths for a single write/edit target. */
-function pathOutside(p: string, cwd: string): string[] {
+function pathOutside(p: string, cwd: string): FlaggedPath[] {
 	const cwdReal = canonicalize(cwd);
-	const target = canonicalize(resolve(cwd, p));
+	const requested = resolve(cwd, p);
+	const target = canonicalize(requested);
 	if (isInside(cwdReal, target) || isExempt(target)) return [];
-	return [target];
+	return [{ target, requested }];
+}
+
+/**
+ * Session allowlist root for a requested path: the directory the caller named, with symlinks
+ * resolved only on that directory. Using the requested directory keeps symlinked siblings in the
+ * same folder covered, unlike resolving the file first.
+ */
+function allowRootFor(requested: string): string {
+	let dir = dirname(requested);
+	try {
+		if (statSync(requested).isDirectory()) dir = requested;
+	} catch {
+		// Not created yet; fall back to its parent directory.
+	}
+	return canonicalize(dir);
 }
 
 // ---------------------------------------------------------------------------
@@ -183,8 +206,17 @@ function pathOutside(p: string, cwd: string): string[] {
 // ---------------------------------------------------------------------------
 
 export default function (pi: ExtensionAPI) {
-	const sessionAllowed = new Set<string>();
+	const sessionAllowedDirs = new Set<string>();
+	let confirmChain: Promise<unknown> = Promise.resolve();
 	let gateEnabled = CONFIG.enabled;
+
+	/** A target is allowed when it is a session-allowed directory or a descendant of one. */
+	function isSessionAllowed(target: string): boolean {
+		for (const root of sessionAllowedDirs) {
+			if (isInside(root, target)) return true;
+		}
+		return false;
+	}
 
 	pi.registerFlag("no-outside-cwd-gate", {
 		description: "Disable the outside-cwd confirmation gate for this run",
@@ -193,55 +225,71 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	pi.on("session_start", async (_event, ctx) => {
-		sessionAllowed.clear();
+		sessionAllowedDirs.clear();
 		gateEnabled = CONFIG.enabled && !(pi.getFlag("no-outside-cwd-gate") as boolean);
 		if (!gateEnabled) ctx.ui.notify("Outside-cwd gate disabled", "warning");
 	});
 
 	pi.on("session_shutdown", async () => {
-		sessionAllowed.clear();
+		sessionAllowedDirs.clear();
 	});
 
 	pi.registerCommand("outside-cwd", {
 		description: "Show status of the outside-cwd gate and toggle it for this session",
 		handler: async (_args, ctx) => {
 			gateEnabled = !gateEnabled;
-			const allowed = [...sessionAllowed];
+			const allowed = [...sessionAllowedDirs];
 			ctx.ui.notify(
 				[
 					`Outside-cwd gate: ${gateEnabled ? "enabled" : "disabled"}`,
 					`Allowed outside roots: ${CONFIG.allowedOutsideRoots.join(", ")}`,
-					`Session-allowed paths: ${allowed.length > 0 ? allowed.join(", ") : "(none)"}`,
+					`Session-allowed directories: ${allowed.length > 0 ? allowed.join(", ") : "(none)"}`,
 				].join("\n"),
 				"info",
 			);
 		},
 	});
 
-	async function confirmOutside(
+	function confirmOutside(
 		ctx: { hasUI: boolean; ui: { select(title: string, options: string[]): Promise<string | undefined> } },
 		toolName: string,
 		detail: string,
-		paths: string[],
+		paths: FlaggedPath[],
 	): Promise<{ block: boolean; reason: string } | undefined> {
-		const toAsk = paths.filter((p) => !sessionAllowed.has(p));
+		// Serialize prompts: pi supports one active select dialog, and parallel tool calls
+		// from one assistant message would otherwise stack dialogs and lose earlier answers.
+		const answer = confirmChain.then(() => promptOutside(ctx, toolName, detail, paths));
+		confirmChain = answer.then(
+			() => undefined,
+			() => undefined,
+		);
+		return answer;
+	}
+
+	async function promptOutside(
+		ctx: { hasUI: boolean; ui: { select(title: string, options: string[]): Promise<string | undefined> } },
+		toolName: string,
+		detail: string,
+		paths: FlaggedPath[],
+	): Promise<{ block: boolean; reason: string } | undefined> {
+		const toAsk = paths.filter((f) => !isSessionAllowed(f.target) && !isSessionAllowed(f.requested));
 		if (toAsk.length === 0) return undefined;
 
 		if (!ctx.hasUI) {
-			return { block: true, reason: `Blocked by outside-cwd gate (no UI): ${toAsk.join(", ")}` };
+			return { block: true, reason: `Blocked by outside-cwd gate (no UI): ${toAsk.map((f) => f.target).join(", ")}` };
 		}
 
 		const choice = await ctx.ui.select(
 			`⚠️ Outside working directory\nTool: ${toolName}\n${detail}`,
-			["Allow once", "Allow this path for this session", "Block"],
+			["Allow once", "Allow this directory for this session", "Block"],
 		);
 
 		if (choice === "Allow once") return undefined;
-		if (choice === "Allow this path for this session") {
-			for (const p of toAsk) sessionAllowed.add(p);
+		if (choice === "Allow this directory for this session") {
+			for (const f of toAsk) sessionAllowedDirs.add(allowRootFor(f.requested));
 			return undefined;
 		}
-		return { block: true, reason: `Blocked by outside-cwd gate: ${toAsk.join(", ")}` };
+		return { block: true, reason: `Blocked by outside-cwd gate: ${toAsk.map((f) => f.target).join(", ")}` };
 	}
 
 	pi.on("tool_call", async (event, ctx) => {
@@ -252,7 +300,7 @@ export default function (pi: ExtensionAPI) {
 			if (typeof p !== "string" || p.length === 0) return undefined;
 			const paths = pathOutside(p, ctx.cwd);
 			if (paths.length === 0) return undefined;
-			return confirmOutside(ctx, event.toolName, `Path: ${paths[0]}`, paths);
+			return confirmOutside(ctx, event.toolName, `Path: ${paths[0].target}`, paths);
 		}
 
 		if (event.toolName === "bash" || event.toolName === "powershell") {
@@ -261,7 +309,7 @@ export default function (pi: ExtensionAPI) {
 			const paths = findOutsidePaths(command, ctx.cwd);
 			if (paths.length === 0) return undefined;
 			const shown = command.length > 300 ? `${command.slice(0, 300)}…` : command;
-			return confirmOutside(ctx, event.toolName, `Command: ${shown}\nPaths: ${paths.join(", ")}`, paths);
+			return confirmOutside(ctx, event.toolName, `Command: ${shown}\nPaths: ${paths.map((f) => f.target).join(", ")}`, paths);
 		}
 
 		return undefined;
