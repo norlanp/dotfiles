@@ -1,0 +1,10 @@
+{
+  "lastChangelogVersion": "1.0.0",
+  "defaultProvider": "ollama-cloud",
+  "defaultModel": "deepseek-v4.1-flash",
+  "packages": [
+    "npm:pi-ollama-cloud",
+    "npm:@narumitw/pi-plan-mode"
+  ],
+  "hideThinkingBlock": true
+}

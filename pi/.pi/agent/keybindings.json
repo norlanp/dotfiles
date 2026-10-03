@@ -1,0 +1,5 @@
+{
+  "tui.altScreen.halfPageUp": "shift+u",
+  "tui.altScreen.halfPageDown": "shift+d",
+  "app.thinking.cycle": "alt+t"
+}
