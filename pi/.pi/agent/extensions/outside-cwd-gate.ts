@@ -1,11 +1,23 @@
 /**
  * Outside-cwd Gate
  *
- * Prompts before write/edit targets a path outside the current working directory,
- * and before bash/powershell commands that reference paths outside it.
+ * Prompts before write/edit target a path outside the current working directory, and before
+ * bash/powershell commands that reference paths outside it.
  *
- * Detection for shell commands is a best-effort static scan, not a shell parser.
- * It is a confirmation gate, not a security boundary.
+ * Model (mirrors OpenCode's permission system):
+ *   - Every request is described by glob patterns. An outside target produces a `<dir>/*` glob:
+ *     the target itself for directories and not-yet-created paths, the containing directory for
+ *     existing files. The filesystem root is never granted wholesale.
+ *   - "Allow once" permits the current call only. "Allow always" records the request globs for the
+ *     session; OpenCode-style wildcard matching (`*` crosses directory separators) then covers
+ *     later requests, including ones already queued behind the prompt.
+ *   - "Reject" blocks the call and reports the paths.
+ *   - Arguments of the commands in PATH_COMMANDS are resolved through the filesystem the way
+ *     OpenCode's bash tool does, so a symlinked argument is caught. Other commands are scanned for
+ *     path-like operands and redirection targets.
+ *
+ * Detection for shell commands is a best-effort static scan, not a shell parser. It is a
+ * confirmation gate, not a security boundary.
  *
  * Scope:
  *   - Gated:   write, edit, bash, powershell
@@ -31,10 +43,38 @@ const CONFIG = {
 	exemptExecutables: true,
 };
 
+/** Commands whose arguments OpenCode resolves through the filesystem before gating. */
+const PATH_COMMANDS = new Set(["cd", "rm", "cp", "mv", "mkdir", "touch", "chmod", "chown", "cat"]);
+
+const COMMAND_SEPARATORS = new Set([";", "&&", "||", "|", "&", "\n", "(", ")"]);
+const REDIRECTIONS = new Set([">", ">>", "<"]);
+
 const DEV_RE = /^\/dev\/(null|stdout|stderr|tty|fd\/\d+)$/;
 const URL_RE = /:\/\//;
 const PROTOCOL_RELATIVE_RE = /^\/\/[^/\s]+\.[^/\s]+/;
 const ASSIGN_RE = /^[A-Za-z_][A-Za-z0-9_]*=/;
+
+// ---------------------------------------------------------------------------
+// Permission patterns
+// ---------------------------------------------------------------------------
+
+/**
+ * Match a value against an OpenCode permission glob. `*` matches any characters including
+ * separators, `?` matches one, and a trailing `" *"` also matches the bare prefix.
+ */
+export function globMatch(value: string, pattern: string): boolean {
+	let escaped = pattern
+		.replace(/[.+^${}()|[\]\\]/g, "\\$&")
+		.replace(/\*/g, ".*")
+		.replace(/\?/g, ".");
+	if (escaped.endsWith(" .*")) escaped = `${escaped.slice(0, -3)}( .*)?`;
+	return new RegExp(`^${escaped}$`, "s").test(value);
+}
+
+/** Whether every request pattern is already covered by an approved pattern. */
+function covered(patterns: string[], approved: string[]): boolean {
+	return patterns.every((p) => approved.some((a) => globMatch(p, a)));
+}
 
 // ---------------------------------------------------------------------------
 // Path helpers
@@ -83,6 +123,14 @@ function isExecutableFile(target: string): boolean {
 	}
 }
 
+function isDirectory(target: string): boolean {
+	try {
+		return statSync(target).isDirectory();
+	} catch {
+		return false;
+	}
+}
+
 /** Whether the path itself or any ancestor (short of the filesystem root) exists. */
 function existsSelfOrAncestor(p: string): boolean {
 	let cur = p;
@@ -103,6 +151,10 @@ function expandToken(tok: string): string {
 	return tok;
 }
 
+// ---------------------------------------------------------------------------
+// Shell tokenizing
+// ---------------------------------------------------------------------------
+
 /** A shell word (quotes removed) or an operator such as `>` or `|`. */
 interface Token {
 	value: string;
@@ -112,7 +164,7 @@ interface Token {
 /**
  * Split a command into shell-like words and operators, honoring single/double quotes, backslash
  * escapes, and `#` comments. Quoted text stays one word so a path inside a quoted string is not
- * chopped into fragments that look absolute.
+ * chopped into fragments that look absolute. Newlines are emitted as separators.
  */
 function tokenizeShell(command: string): Token[] {
 	const tokens: Token[] = [];
@@ -154,7 +206,14 @@ function tokenizeShell(command: string): Token[] {
 			continue;
 		}
 
-		if (ch === " " || ch === "\t" || ch === "\r" || ch === "\n") {
+		if (ch === "\n") {
+			flush();
+			tokens.push({ value: "\n", operator: "\n" });
+			i++;
+			continue;
+		}
+
+		if (ch === " " || ch === "\t" || ch === "\r") {
 			flush();
 			i++;
 			continue;
@@ -178,6 +237,42 @@ function tokenizeShell(command: string): Token[] {
 	}
 	flush();
 	return tokens;
+}
+
+/** Group tokens into simple commands, splitting on separators such as `;`, `&&`, `|`, newlines. */
+function splitCommands(tokens: Token[]): Token[][] {
+	const commands: Token[][] = [];
+	let current: Token[] = [];
+	for (const token of tokens) {
+		if (token.operator !== undefined && COMMAND_SEPARATORS.has(token.operator)) {
+			if (current.length > 0) commands.push(current);
+			current = [];
+			continue;
+		}
+		current.push(token);
+	}
+	if (current.length > 0) commands.push(current);
+	return commands;
+}
+
+/** Command name (without a directory prefix) and its word arguments, skipping redirection targets. */
+function commandNameAndArgs(tokens: Token[]): { name?: string; args: string[] } {
+	let name: string | undefined;
+	const args: string[] = [];
+	for (let i = 0; i < tokens.length; i++) {
+		const token = tokens[i];
+		if (token.operator !== undefined) {
+			if (REDIRECTIONS.has(token.operator)) i++; // skip the target word
+			continue;
+		}
+		if (name === undefined) {
+			if (ASSIGN_RE.test(token.value)) continue;
+			name = token.value.split("/").pop() ?? token.value;
+			continue;
+		}
+		args.push(token.value);
+	}
+	return { name, args };
 }
 
 /**
@@ -235,92 +330,110 @@ function looksLikePattern(tok: string): boolean {
 	return metach.test(range[1]) || metach.test(range[2]);
 }
 
+function isPathLike(tok: string): boolean {
+	const isAbs = tok.startsWith("/");
+	const isHome =
+		tok === "~" ||
+		tok.startsWith("~/") ||
+		tok === "$HOME" ||
+		tok.startsWith("$HOME/") ||
+		tok === "${HOME}" ||
+		tok.startsWith("${HOME}/");
+	const isTraversal = /(^|\/)\.\.($|\/)/.test(tok);
+	const hasSlash = tok.includes("/");
+	if (!isAbs && !isHome && !isTraversal && !hasSlash) return false;
+	return !looksLikePattern(tok);
+}
+
 // ---------------------------------------------------------------------------
-// Shell candidate extraction
+// Outside-path extraction
 // ---------------------------------------------------------------------------
+
+/** An outside target together with the session pattern that would approve it. */
+export interface FlaggedPath {
+	/** Canonical target used for gating. */
+	target: string;
+	/** Absolute path as requested, before symlink resolution. */
+	requested: string;
+	/** OpenCode-style directory glob: `<target dir>/*`. */
+	glob: string;
+}
+
+function toFlagged(requested: string): FlaggedPath {
+	const target = canonicalize(requested);
+	// Directories grant their contents; existing files grant their containing directory;
+	// not-yet-created paths grant only their own subtree. Clamp the root so one approval of a
+	// root-level target cannot record `/*` and silently cover the whole filesystem.
+	let dir = target;
+	if (!isDirectory(requested) && existsSync(requested)) dir = dirname(target);
+	if (dir === "/") dir = target;
+	return { target, requested, glob: join(dir, "*") };
+}
 
 interface Candidate {
 	raw: string;
 	isRedirection: boolean;
 }
 
-function extractCandidates(command: string): Candidate[] {
-	const tokens = tokenizeShell(stripHeredocs(command));
+export function extractCandidates(command: string): Candidate[] {
 	const out: Candidate[] = [];
 	const seen = new Set<string>();
-	const push = (value: string, isRedirection: boolean) => {
-		if (!value) return;
-		const key = `${isRedirection ? "R" : "T"}\u0000${value}`;
+	const push = (raw: string, isRedirection: boolean) => {
+		if (!raw) return;
+		const key = `${isRedirection ? "R" : "T"}\u0000${raw}`;
 		if (seen.has(key)) return;
 		seen.add(key);
-		out.push({ raw: value, isRedirection });
+		out.push({ raw, isRedirection });
 	};
 
-	/** Push a word when it references a path (absolute, home-relative, or containing a slash). */
-	const pushIfPath = (tok: string) => {
-		const isAbs = tok.startsWith("/");
-		const isHome =
-			tok === "~" ||
-			tok.startsWith("~/") ||
-			tok === "$HOME" ||
-			tok.startsWith("$HOME/") ||
-			tok === "${HOME}" ||
-			tok.startsWith("${HOME}/");
-		const isTraversal = /(^|\/)\.\.($|\/)/.test(tok);
-		const hasSlash = tok.includes("/");
-		if (!isAbs && !isHome && !isTraversal && !hasSlash) return;
-		if (looksLikePattern(tok)) return;
-		push(tok, false);
-	};
-
-	for (let i = 0; i < tokens.length; i++) {
-		const token = tokens[i];
-
-		if (token.operator !== undefined) {
-			// The next word is a redirection target, except for heredoc delimiters and fd duplications.
-			if (token.operator === ">" || token.operator === ">>" || token.operator === "<") {
-				const next = tokens[i + 1];
+	for (const segment of splitCommands(tokenizeShell(stripHeredocs(command)))) {
+		// Redirection targets are always file writes.
+		for (let i = 0; i < segment.length; i++) {
+			const token = segment[i];
+			if (token.operator !== undefined && REDIRECTIONS.has(token.operator)) {
+				const next = segment[i + 1];
 				if (next !== undefined && next.operator === undefined) {
 					push(next.value, true);
 					i++;
 				}
 			}
-			continue;
 		}
 
-		const tok = token.value;
-		if (!tok || URL_RE.test(tok)) continue;
-		if (tok === "-") continue;
-
-		// `KEY=value` is an assignment whose value is used via `$KEY`, not a path operand.
-		if (ASSIGN_RE.test(tok)) continue;
-		if (tok.startsWith("-")) {
-			// `--opt=value`: the value can still be a path operand.
-			const eq = tok.indexOf("=");
-			if (eq > 0) {
-				const value = tok.slice(eq + 1);
-				if (value && !value.includes(":") && !value.startsWith("-")) pushIfPath(value);
+		// Broad scan: path-like operands of any command.
+		for (const token of segment) {
+			if (token.operator !== undefined) continue;
+			const raw = token.value;
+			if (!raw || URL_RE.test(raw) || raw === "-" || ASSIGN_RE.test(raw)) continue;
+			if (raw.startsWith("-")) {
+				// `--opt=value`: the value can still be a path operand.
+				const eq = raw.indexOf("=");
+				if (eq > 0) {
+					const value = raw.slice(eq + 1);
+					if (value && !value.includes(":") && !value.startsWith("-") && isPathLike(value)) push(value, false);
+				}
+				continue;
 			}
-			continue;
-		};
+			if (isPathLike(raw)) push(raw, false);
+		}
 
-		pushIfPath(tok);
+		// OpenCode-style: resolve every non-flag argument of known path commands.
+		const { name, args } = commandNameAndArgs(segment);
+		if (name === undefined || !PATH_COMMANDS.has(name)) continue;
+		for (const arg of args) {
+			if (arg.startsWith("-")) continue;
+			if (name === "chmod" && arg.startsWith("+")) continue;
+			push(arg, false);
+		}
 	}
 
 	return out;
 }
 
-interface FlaggedPath {
-	/** Canonical target used for gating. */
-	target: string;
-	/** Absolute path as requested, before symlink resolution. */
-	requested: string;
-}
-
 /** Return resolved outside-cwd paths referenced by a command (empty = allowed). */
-function findOutsidePaths(command: string, cwd: string): FlaggedPath[] {
+export function findOutsidePaths(command: string, cwd: string): FlaggedPath[] {
 	const cwdReal = canonicalize(cwd);
 	const flagged: FlaggedPath[] = [];
+	const seen = new Set<string>();
 	for (const { raw, isRedirection } of extractCandidates(command)) {
 		const requested = resolve(cwd, expandToken(raw));
 		// `//host.tld/...` is a protocol-relative URL unless that path or an ancestor exists.
@@ -329,55 +442,47 @@ function findOutsidePaths(command: string, cwd: string): FlaggedPath[] {
 			continue;
 		}
 		const target = canonicalize(requested);
-		if (isInside(cwdReal, target)) continue;
-		if (isExempt(target)) continue;
+		if (isInside(cwdReal, target) || isExempt(target)) continue;
 		if (!isRedirection && CONFIG.exemptExecutables && isExecutableFile(target)) continue;
-		if (!flagged.some((f) => f.target === target)) flagged.push({ target, requested });
+		if (seen.has(target)) continue;
+		seen.add(target);
+		flagged.push(toFlagged(requested));
 	}
 	return flagged;
 }
 
 /** Return outside-cwd paths for a single write/edit target. */
-function pathOutside(p: string, cwd: string): FlaggedPath[] {
+export function pathOutside(p: string, cwd: string): FlaggedPath[] {
 	const cwdReal = canonicalize(cwd);
 	const requested = resolve(cwd, p);
 	const target = canonicalize(requested);
 	if (isInside(cwdReal, target) || isExempt(target)) return [];
-	return [{ target, requested }];
-}
-
-/**
- * Session allowlist root for a requested path: existing directories are allowed directly, existing
- * files allow their containing directory, and not-yet-created paths allow the path itself. Symlinks
- * are resolved only on the chosen directory, which keeps symlinked siblings in the same folder
- * covered rather than resolving the file to a different tree.
- */
-function allowRootFor(requested: string): string {
-	let dir = requested;
-	try {
-		if (!statSync(requested).isDirectory()) dir = dirname(requested);
-	} catch {
-		// Not created yet; keep the requested path as the root.
-	}
-	return canonicalize(dir);
+	return [toFlagged(requested)];
 }
 
 // ---------------------------------------------------------------------------
 // Extension
 // ---------------------------------------------------------------------------
 
+interface GateContext {
+	cwd: string;
+	hasUI: boolean;
+	ui: { select(title: string, options: string[]): Promise<string | undefined> };
+}
+
+interface GateResult {
+	block: true;
+	reason: string;
+}
+
+const OPTION_ONCE = "Allow once";
+const OPTION_ALWAYS = "Allow always for this session";
+const OPTION_REJECT = "Reject";
+
 export default function (pi: ExtensionAPI) {
-	const sessionAllowedDirs = new Set<string>();
+	const approvedPatterns: string[] = [];
 	let confirmChain: Promise<unknown> = Promise.resolve();
 	let gateEnabled = CONFIG.enabled;
-
-	/** A target is allowed when it is a session-allowed directory or a descendant of one. */
-	function isSessionAllowed(target: string): boolean {
-		for (const root of sessionAllowedDirs) {
-			if (isInside(root, target)) return true;
-		}
-		return false;
-	}
 
 	pi.registerFlag("no-outside-cwd-gate", {
 		description: "Disable the outside-cwd confirmation gate for this run",
@@ -386,71 +491,74 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	pi.on("session_start", async (_event, ctx) => {
-		sessionAllowedDirs.clear();
+		approvedPatterns.length = 0;
 		gateEnabled = CONFIG.enabled && !(pi.getFlag("no-outside-cwd-gate") as boolean);
 		if (!gateEnabled) ctx.ui.notify("Outside-cwd gate disabled", "warning");
 	});
 
 	pi.on("session_shutdown", async () => {
-		sessionAllowedDirs.clear();
+		approvedPatterns.length = 0;
 	});
 
 	pi.registerCommand("outside-cwd", {
 		description: "Show status of the outside-cwd gate and toggle it for this session",
 		handler: async (_args, ctx) => {
 			gateEnabled = !gateEnabled;
-			const allowed = [...sessionAllowedDirs];
 			ctx.ui.notify(
 				[
 					`Outside-cwd gate: ${gateEnabled ? "enabled" : "disabled"}`,
 					`Allowed outside roots: ${CONFIG.allowedOutsideRoots.join(", ")}`,
-					`Session-allowed directories: ${allowed.length > 0 ? allowed.join(", ") : "(none)"}`,
+					`Session-approved patterns: ${approvedPatterns.length > 0 ? approvedPatterns.join(", ") : "(none)"}`,
 				].join("\n"),
 				"info",
 			);
 		},
 	});
 
-	function confirmOutside(
-		ctx: { hasUI: boolean; ui: { select(title: string, options: string[]): Promise<string | undefined> } },
-		toolName: string,
-		detail: string,
-		paths: FlaggedPath[],
-	): Promise<{ block: boolean; reason: string } | undefined> {
-		// Serialize prompts: pi supports one active select dialog, and parallel tool calls
-		// from one assistant message would otherwise stack dialogs and lose earlier answers.
-		const answer = confirmChain.then(() => promptOutside(ctx, toolName, detail, paths));
-		confirmChain = answer.then(
-			() => undefined,
-			() => undefined,
-		);
-		return answer;
+	function describe(toolName: string, detail: string, paths: FlaggedPath[]): string {
+		const globs = [...new Set(paths.map((f) => f.glob))];
+		return `⚠️ Outside working directory\nTool: ${toolName}\n${detail}\nApproving covers: ${globs.join(", ")}`;
 	}
 
-	async function promptOutside(
-		ctx: { hasUI: boolean; ui: { select(title: string, options: string[]): Promise<string | undefined> } },
+	async function prompt(
+		ctx: GateContext,
 		toolName: string,
 		detail: string,
 		paths: FlaggedPath[],
-	): Promise<{ block: boolean; reason: string } | undefined> {
-		const toAsk = paths.filter((f) => !isSessionAllowed(f.target));
-		if (toAsk.length === 0) return undefined;
-
+	): Promise<GateResult | undefined> {
 		if (!ctx.hasUI) {
-			return { block: true, reason: `Blocked by outside-cwd gate (no UI): ${toAsk.map((f) => f.target).join(", ")}` };
+			return { block: true, reason: `Blocked by outside-cwd gate (no UI): ${paths.map((f) => f.target).join(", ")}` };
 		}
-
-		const choice = await ctx.ui.select(
-			`⚠️ Outside working directory\nTool: ${toolName}\n${detail}`,
-			["Allow once", "Allow this directory for this session", "Block"],
-		);
-
-		if (choice === "Allow once") return undefined;
-		if (choice === "Allow this directory for this session") {
-			for (const f of toAsk) sessionAllowedDirs.add(allowRootFor(f.requested));
+		const choice = await ctx.ui.select(describe(toolName, detail, paths), [OPTION_ONCE, OPTION_ALWAYS, OPTION_REJECT]);
+		if (choice === OPTION_ONCE) return undefined;
+		if (choice === OPTION_ALWAYS) {
+			for (const glob of new Set(paths.map((f) => f.glob))) approvedPatterns.push(glob);
 			return undefined;
 		}
-		return { block: true, reason: `Blocked by outside-cwd gate: ${toAsk.map((f) => f.target).join(", ")}` };
+		return { block: true, reason: `Blocked by outside-cwd gate: ${paths.map((f) => f.target).join(", ")}` };
+	}
+
+	/**
+	 * Serialize prompts: pi supports one active select dialog, and parallel tool calls from one
+	 * assistant message would otherwise stack dialogs. Re-checking approvals inside the serialized
+	 * section lets an "always" answer resolve the requests queued behind it, as OpenCode does.
+	 */
+	function gate(
+		ctx: GateContext,
+		toolName: string,
+		detail: (paths: FlaggedPath[]) => string,
+		paths: FlaggedPath[],
+	): Promise<GateResult | undefined> {
+		const run = confirmChain.then(() => {
+			const pending = paths.filter((f) => !covered([f.glob], approvedPatterns));
+			if (pending.length === 0) return undefined;
+			return prompt(ctx, toolName, detail(pending), pending);
+		});
+		confirmChain = run.then(
+			() => undefined,
+			() => undefined,
+		);
+		return run;
 	}
 
 	pi.on("tool_call", async (event, ctx) => {
@@ -461,7 +569,7 @@ export default function (pi: ExtensionAPI) {
 			if (typeof p !== "string" || p.length === 0) return undefined;
 			const paths = pathOutside(p, ctx.cwd);
 			if (paths.length === 0) return undefined;
-			return confirmOutside(ctx, event.toolName, `Path: ${paths[0].target}`, paths);
+			return gate(ctx, event.toolName, (pending) => `Path: ${pending[0].target}`, paths);
 		}
 
 		if (event.toolName === "bash" || event.toolName === "powershell") {
@@ -470,7 +578,7 @@ export default function (pi: ExtensionAPI) {
 			const paths = findOutsidePaths(command, ctx.cwd);
 			if (paths.length === 0) return undefined;
 			const shown = command.length > 300 ? `${command.slice(0, 300)}…` : command;
-			return confirmOutside(ctx, event.toolName, `Command: ${shown}\nPaths: ${paths.map((f) => f.target).join(", ")}`, paths);
+			return gate(ctx, event.toolName, (pending) => `Command: ${shown}\nPaths: ${pending.map((f) => f.target).join(", ")}`, paths);
 		}
 
 		return undefined;
