@@ -13,9 +13,8 @@ Default: `quick docs/`. If arg 1 is not `quick` or `full`, treat it as `scope`.
 
 - `docs/features.md`: capabilities and status: `planned`, `active`, `deprecated`, `removed`, `unscoped`
 - `docs/glossary.md`: terms and abbreviations
-- `docs/architecture.md`: current system shape and boundaries
+- `docs/architecture.md`: current system shape, boundaries, and entry points
 - `docs/requirements.md`: durable product requirements
-- `docs/code-map.md`: repo map and entry points
 - `docs/adr/`: decisions
 - `docs/runbooks/`: operations (conditional - only for projects with deployment/ops)
 
@@ -40,7 +39,6 @@ Preserve historical docs: `prds/`, `audits/`, `hotfixes/`, release notes, ADRs. 
    - applicable canonical docs missing from `AGENTS.md`
    - orphan docs, excluding indexes and canonical entry points
    - invalid feature status or missing requirement trace
-   - `code-map.md` paths that do not exist
    - glossary/architecture/ADR conflicts
    - durable content stranded in historical docs that belongs in canonical
    - missing or inconsistent dates on PRDs, audits, hotfixes
