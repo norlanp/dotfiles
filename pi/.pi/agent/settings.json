@@ -3,8 +3,7 @@
   "defaultProvider": "ollama-cloud",
   "defaultModel": "deepseek-v4.1-flash",
   "packages": [
-    "npm:pi-ollama-cloud",
-    "npm:@narumitw/pi-plan-mode"
+    "npm:pi-ollama-cloud"
   ],
   "hideThinkingBlock": true
 }
