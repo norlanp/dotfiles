@@ -1,9 +1,12 @@
 {
-  "lastChangelogVersion": "1.3.0",
+  "lastChangelogVersion": "1.5.0",
   "defaultProvider": "ollama-cloud",
-  "defaultModel": "deepseek-v4.1-flash",
+  "defaultModel": "deepseek-v4.1-flash:1017",
   "packages": [
     "npm:pi-ollama-cloud"
   ],
-  "hideThinkingBlock": true
+  "hideThinkingBlock": true,
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-ollama-cloud\",\"scope\":\"user\"}": "0.13.1"
+  }
 }
