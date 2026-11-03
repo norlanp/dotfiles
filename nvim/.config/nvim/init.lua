@@ -536,6 +536,11 @@ require('lazy').setup({
 },
 }, {})
 
+-- [[ Highlight overrides ]]
+-- Vim's syntax/json.vim highlights the quote characters with jsonQuote, which
+-- nord.nvim links to Quote (#434C5E) - unreadable on the #2E3440 background.
+vim.api.nvim_set_hl(0, 'jsonQuote', { link = 'Delimiter' })
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
