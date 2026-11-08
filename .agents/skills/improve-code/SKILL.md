@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Improve Code
 
-`/improve-code [path] [--arch=monolith|distributed|serverless] [--html]` - Read-only audit → report of **deepening opportunities** (shallow modules → deep) → grilling loop on user's pick. No code mods in audit. Invocation implies read-only git approval (`status/diff/log`); no git write without separate confirmation.
+`/skill:improve-code [path] [--arch=monolith|distributed|serverless] [--html]` - Read-only audit → report of **deepening opportunities** (shallow modules → deep) → grilling loop on user's pick. No code mods in audit. Invocation implies read-only git approval (`status/diff/log`); no git write without separate confirmation.
 
 ## Vocabulary (use exactly - no "component/service/API/boundary")
 
@@ -36,7 +36,7 @@ Tests (`*.test.*`, `*.spec.*`, `__tests__/`, `tests/`, `*_test.go`), migrations 
 
 ### 2. Explore
 
-Spawn one `subagent_type=Explore`. Walk scope organically, feel friction, no rigid heuristics. Look for: concept-bouncing across small modules (no locality); shallow modules; pure-for-testability extracts where bugs hide in call sites (no locality); seam leaks; untested/hard-to-test-through-interface; cross-layer calls the pattern says should be seamed. Apply **deletion test** to suspects.
+Walk the scope yourself with `rg`/`read`/`bash` (batch many reads through `codemode` when the scope is wide). Walk it organically, feel friction, no rigid heuristics. Look for: concept-bouncing across small modules (no locality); shallow modules; pure-for-testability extracts where bugs hide in call sites (no locality); seam leaks; untested/hard-to-test-through-interface; cross-layer calls the pattern says should be seamed. Apply **deletion test** to suspects.
 
 ### 3. Report
 
@@ -46,19 +46,19 @@ Spawn one `subagent_type=Explore`. Walk scope organically, feel friction, no rig
 
 ### 4. Grilling
 
-Run `/brainstorm` on picked candidate - design tree: constraints, dependencies, deepened shape, behind-seam, surviving tests. Inline: new term → add to `docs/glossary.md` (create lazily if none); sharpened term → update; load-bearing rejection → offer ADR only if hard-to-reverse + surprising + real trade-off.
+Run `/skill:brainstorm` on picked candidate - design tree: constraints, dependencies, deepened shape, behind-seam, surviving tests. Inline: new term → add to `docs/glossary.md` (create lazily if none); sharpened term → update; load-bearing rejection → offer ADR only if hard-to-reverse + surprising + real trade-off.
 
-## Sub-agent contract (Explore)
+## Explore pass contract
 
-No user prompts, no escalation, assume-and-proceed on low-risk reversible ambiguity (record assumptions), missing context → "insufficient context" notes, findings only in final response.
+No user prompts mid-pass, no escalation, assume-and-proceed on low-risk reversible ambiguity (record assumptions), missing context → "insufficient context" notes, findings only in the final report.
 
 ## Failure handling
 
-Explore timeout → retry once stricter + contract; still blocked → `CHANGES_NEEDED` + missing-context list. HTML write fails (when `--html`) → Markdown in terminal + note. No opener → print path. Not a repo → skip adaptive scope, scan whole/path arg, note reduced confidence.
+Scope too large to walk in one pass → narrow once (changed files only) and note it; still blocked → `CHANGES_NEEDED` + missing-context list. HTML write fails (when `--html`) → Markdown in terminal + note. No opener → print path. Not a repo → skip adaptive scope, scan whole/path arg, note reduced confidence.
 
 ## Out of scope (YAGNI)
 
-No proposing interfaces in Phase 3, code mods, running tests/build/lint, numerical scoring, cross-run tracking, perf/security/correctness bugs (→ `/debug`), forcing layers on layerless code (`NOTHING TO REVIEW - no architectural layering detected`, stop), auto-creating ADRs, spawning >1 Explore.
+No proposing interfaces in Phase 3, code mods, running tests/build/lint, numerical scoring, cross-run tracking, perf/security/correctness bugs (→ `/debug`), forcing layers on layerless code (`NOTHING TO REVIEW - no architectural layering detected`, stop), auto-creating ADRs, parallel exploration passes.
 
 ## Edge cases
 
